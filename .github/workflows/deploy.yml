@@ -1,37 +1,47 @@
-name: Deploy to Forpsi
+name: Deploy to GitHub Pages
 
 on:
   push:
     branches: [main]
   workflow_dispatch: # Manual trigger
 
-# Never let two deploys overwrite each other mid-upload.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Let a running deploy finish rather than cancelling it — a half-published
+# site is worse than a slightly stale one.
 concurrency:
-  group: deploy-forpsi
-  cancel-in-progress: true
+  group: pages
+  cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v6.0.2
 
-      # Uploads only the files that changed since the last run — it keeps a
-      # .ftp-deploy-sync-state.json on the server to work out the diff.
-      - name: Upload over FTPS
-        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+      - uses: actions/configure-pages@v6.0.0
+
+      # Publish the site files only — not the repo plumbing. Anything new
+      # added to the repo is picked up automatically.
+      - name: Stage site
+        run: |
+          mkdir -p _site
+          rsync -a \
+            --exclude '.git' \
+            --exclude '.github' \
+            --exclude '_site' \
+            ./ _site/
+          echo "Publishing:" && find _site -type f | sort
+
+      - uses: actions/upload-pages-artifact@v5.0.0
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftps
-          # CHECK THIS against your account: log in over FTP once and look at
-          # the folder the web root actually lives in. On Forpsi Linux it is
-          # usually /www/, but some accounts use /httpdocs/ or /web/.
-          server-dir: ./www/
-          local-dir: ./
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/.github/**
-            **/README.md
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v5.0.1
