@@ -289,6 +289,8 @@ a { color: inherit; }
   border-top: 0;
   padding-inline: max(var(--gutter), calc((100% - var(--shell)) / 2 + var(--gutter)));
   background: #0f0f0f;
+  /* Inherited colour is computed at :root, so restate it for the band. */
+  color: var(--text);
 
   --bg:          #0f0f0f;
   --ink:         #ffffff;
@@ -330,7 +332,9 @@ a { color: inherit; }
 
 .prose { max-width: var(--measure); }
 .prose p + p { margin-top: 1.25rem; }
-.prose p { text-wrap: pretty; }
+/* Resolve --text here rather than inheriting body's already-computed
+   colour, so prose follows whatever section it sits in (see .section--invert). */
+.prose p { color: var(--text); text-wrap: pretty; }
 
 .prose__lead {
   font-size: 1.125rem;
