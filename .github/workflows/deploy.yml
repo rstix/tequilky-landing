@@ -1,0 +1,37 @@
+name: Deploy to Forpsi
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # Manual trigger
+
+# Never let two deploys overwrite each other mid-upload.
+concurrency:
+  group: deploy-forpsi
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.2
+
+      # Uploads only the files that changed since the last run — it keeps a
+      # .ftp-deploy-sync-state.json on the server to work out the diff.
+      - name: Upload over FTPS
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          # CHECK THIS against your account: log in over FTP once and look at
+          # the folder the web root actually lives in. On Forpsi Linux it is
+          # usually /www/, but some accounts use /httpdocs/ or /web/.
+          server-dir: ./www/
+          local-dir: ./
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.github/**
+            **/README.md
