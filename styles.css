@@ -606,3 +606,25 @@ a { color: inherit; }
 .footer__name { color: var(--ink); font-size: 1rem; font-weight: 400; }
 .footer__sub  { font-size: .875rem; color: var(--muted); margin-top: .25rem; }
 .footer__copy { font-size: .75rem; color: var(--faint); margin-top: 2rem; }
+
+/* ──────────────────────────  footer social  ────────────────────────── */
+
+.footer__social { margin-top: 1.25rem; }
+
+.footer__social a {
+  display: inline-flex;
+  align-items: center;
+  gap: .625rem;
+  font-size: .875rem;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color .15s ease;
+}
+.footer__social a:hover { color: var(--ink); }
+
+.footer__social svg {
+  width: 1.125rem;
+  height: 1.125rem;
+  fill: currentColor;
+  flex: 0 0 auto;
+}
