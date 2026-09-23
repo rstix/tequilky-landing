@@ -652,3 +652,17 @@ a { color: inherit; }
   margin-inline: auto;
   padding: 0 var(--gutter) clamp(3rem, 7vw, 5rem);
 }
+
+/* ──────────────────────────  crest in the wordmark  ────────────────────────── */
+
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.wordmark img {
+  display: block;
+  height: 1.75rem;
+  width: auto;
+}
