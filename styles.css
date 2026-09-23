@@ -169,7 +169,7 @@ a { color: inherit; }
 .hero {
   max-width: var(--shell);
   margin-inline: auto;
-  padding: clamp(4rem, 12vw, 9rem) var(--gutter) clamp(3rem, 7vw, 5rem);
+  padding: clamp(4rem, 12vw, 9rem) var(--gutter) 0;
 }
 
 .eyebrow {
@@ -202,7 +202,7 @@ a { color: inherit; }
 .stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  margin: clamp(3rem, 8vw, 5rem) 0 0;
+  margin: clamp(2.5rem, 6vw, 4rem) 0 0;
   border-top: 1px solid var(--rule-strong);
 }
 
@@ -627,4 +627,28 @@ a { color: inherit; }
   height: 1.125rem;
   fill: currentColor;
   flex: 0 0 auto;
+}
+
+/* ──────────────────────────  hero photograph  ────────────────────────── */
+
+.heroshot {
+  max-width: var(--shell);
+  margin: clamp(2.5rem, 6vw, 4rem) auto 0;
+  padding-inline: var(--gutter);
+}
+
+.heroshot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* the source is 960px wide, so cap the upscale and crop rather than blur */
+  max-height: 60vh;
+  object-fit: cover;
+  background: var(--bg-subtle);
+}
+
+.statband {
+  max-width: var(--shell);
+  margin-inline: auto;
+  padding: 0 var(--gutter) clamp(3rem, 7vw, 5rem);
 }

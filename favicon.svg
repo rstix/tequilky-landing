@@ -1,26 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Futsalový míč">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Kaktus v sombreru">
   <style>
-    /* Fills live here — presentation attributes lose to these in the cascade.
-       No dark-mode inversion: a ball is white with dark markings, which reads
-       correctly on a light tab bar (the rim defines it) and on a dark one
-       (the body carries it). Inverting turns the pentagon into a star. */
-    .body { fill: #ffffff; }
-    .rim  { fill: none; stroke: #0f0f0f; stroke-width: 2; }
-    .pent { fill: #0f0f0f; stroke: none; }
-    .seam { fill: none; stroke: #0f0f0f; stroke-width: 2; }
+    /* Colours sampled from the club crest: red #9a2924, green #3a6a31,
+       outline brown #411a12. No dark-mode variant — the mark carries its
+       own colour, so it holds on light and dark tab bars alike. */
+    .cactus { fill: none; stroke: #3a6a31; stroke-linecap: round; stroke-linejoin: round; }
+    .hat    { fill: #9a2924; }
+    .band   { fill: none; stroke: #f0ece9; stroke-width: 1.5; stroke-linecap: round; }
+    .ground { fill: #411a12; }
   </style>
 
-  <circle class="body" cx="16" cy="16" r="13"/>
+  <ellipse class="ground" cx="16" cy="28.6" rx="7.6" ry="1.7"/>
 
-  <!-- seams first, so the rim and pentagon draw over their ends -->
-  <g class="seam">
-    <path d="M16 10 V4"/>
-    <path d="M21.71 14.15 L27.41 12.29"/>
-    <path d="M19.53 20.85 L23.05 25.71"/>
-    <path d="M12.47 20.85 L8.95 25.71"/>
-    <path d="M10.29 14.15 L4.59 12.29"/>
-  </g>
+  <!-- cactus: trunk and two arms, all round-capped strokes -->
+  <path class="cactus" stroke-width="6.6" d="M16 27.4 V11.8"/>
+  <path class="cactus" stroke-width="4"   d="M12.2 21.4 H9.8 V16.8"/>
+  <path class="cactus" stroke-width="4"   d="M19.8 23.2 H22.4 V18.6"/>
 
-  <path class="pent" d="M16 10 L21.71 14.15 L19.53 20.85 L12.47 20.85 L10.29 14.15 Z"/>
-  <circle class="rim" cx="16" cy="16" r="13"/>
+  <!-- sombrero, perched on the crown of the cactus -->
+  <path class="hat" d="M11.3 10.6 Q10.9 4.1 16 4.1 Q21.1 4.1 20.7 10.6 Z"/>
+  <ellipse class="hat" cx="16" cy="10.8" rx="10.9" ry="3"/>
+  <path class="band" d="M11.6 9.1 Q16 10.3 20.4 9.1"/>
 </svg>
