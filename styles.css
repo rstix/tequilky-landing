@@ -163,6 +163,20 @@ a { color: inherit; }
 }
 .topnav__cta:hover { border-color: var(--rule-strong); }
 
+.topbar { transition: background-color .2s ease, border-color .2s ease; }
+
+/* While the hero is under it, the bar is see-through with white type. */
+.topbar--over {
+  background: transparent;
+  backdrop-filter: none;
+  border-bottom-color: transparent;
+}
+.topbar--over .wordmark,
+.topbar--over .topnav a:hover { color: #ffffff; }
+.topbar--over .topnav a { color: #ffffffcc; }
+.topbar--over .topnav__cta { color: #ffffff !important; border-color: #ffffffb3; }
+.topbar--over .topnav__cta:hover { border-color: #ffffff; }
+
 /* The nav is secondary to the page itself — below 40rem the page reads
    top-to-bottom anyway, so we hide the links and keep the one CTA. */
 @media (max-width: 40rem) {
@@ -172,35 +186,95 @@ a { color: inherit; }
 
 /* ──────────────────────────  hero  ────────────────────────── */
 
+/* The team photo fills the first screen and the bar sits on top of it, so
+   the hero slides up under the sticky header by the header's height. The
+   section is dark in both themes, so it pins its own tokens. */
 .hero {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  min-height: clamp(36rem, 92svh, 54rem);
+  /* the bar is 3.5rem plus its 1px bottom rule */
+  margin-top: calc(-3.5rem - 1px);
+  overflow: hidden;
+  background: #0f0f0f;
+  color: #ffffffd9;
+
+  --ink:   #ffffff;
+  --bg:    #0f0f0f;
+  --muted: #ffffffb3;
+  --rule:  #ffffff40;
+}
+
+.hero__photo {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Darken from the bottom and from the left, where the text sits. This is
+   what keeps white text legible over a busy photo, and it also hides that
+   the source is only 960px wide. */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(to top, #0f0f0ff5 0%, #0f0f0f99 55%, #0f0f0f8c 100%),
+    linear-gradient(to right, #0f0f0fb3 0%, #0f0f0f00 70%);
+}
+
+.hero__inner {
+  width: 100%;
   max-width: var(--shell);
   margin-inline: auto;
-  padding: clamp(4rem, 12vw, 9rem) var(--gutter) 0;
+  padding: calc(3.5rem + clamp(3rem, 8vw, 6rem)) var(--gutter) clamp(2.5rem, 5vw, 4rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: clamp(2.5rem, 5vw, 3.25rem);
+}
+
+.hero__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .eyebrow {
-  font-size: .6875rem;
-  font-weight: 400;
+  margin: 0;
+  font-size: .8125rem;
+  font-weight: 500;
   letter-spacing: .2em;
   text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 1.75rem;
+  color: #ffffffcc;
 }
 
 .hero__title {
-  font-size: clamp(3.25rem, 13vw, 8rem);
-  letter-spacing: -0.045em;
-  line-height: .92;
-  margin-bottom: 2rem;
+  font-size: clamp(2.75rem, 7.2vw, 6.5rem);
+  font-weight: 600;
+  letter-spacing: -0.038em;
+  line-height: .94;
+  color: #ffffff;
 }
 
 .hero__lede {
-  max-width: 30rem;
-  font-size: clamp(1.0625rem, 2.2vw, 1.3125rem);
-  font-weight: 300;
-  line-height: 1.55;
-  color: var(--text);
+  max-width: 37.5rem;
+  font-size: clamp(1.0625rem, 1.6vw, 1.25rem);
+  line-height: 1.5;
+  color: #ffffffd9;
   text-wrap: pretty;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  padding-top: .75rem;
 }
 
 /* stat strip ------------------------------------------------ */
@@ -208,48 +282,39 @@ a { color: inherit; }
 .stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  margin: clamp(2.5rem, 6vw, 4rem) 0 0;
-  border-top: 1px solid var(--rule-strong);
+  margin: 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
 }
 
 .stat {
   display: flex;
   flex-direction: column;
-  padding: 1.5rem 1.25rem 1.5rem 0;
-  border-right: 1px solid var(--rule);
+  gap: .375rem;
 }
-.stat:last-child { border-right: 0; }
-.stat:not(:first-child) { padding-left: 1.25rem; }
 
 .stat dt {
   order: 2;
-  font-size: .6875rem;
-  letter-spacing: .12em;
+  font-size: .75rem;
+  font-weight: 500;
+  letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--muted);
-  margin-top: .5rem;
 }
+
 .stat dd {
   order: 1;
   margin: 0;
-  color: var(--ink);
-  line-height: 1;
-}
-
-.stat__num {
-  font-size: clamp(2.25rem, 6vw, 3.5rem);
+  font-size: clamp(2rem, 3.4vw, 2.5rem);
   font-weight: 300;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  color: #ffffff;
   font-variant-numeric: tabular-nums;
 }
-.stat__plus { font-size: 1.5rem; font-weight: 300; color: var(--faint); }
-
 
 @media (max-width: 40rem) {
-  .stats { grid-template-columns: repeat(2, 1fr); }
-  .stat:nth-child(2) { border-right: 0; }
-  .stat:nth-child(-n+2) { border-bottom: 1px solid var(--rule); }
-  .stat:nth-child(odd)  { padding-left: 0; }
+  .stats { grid-template-columns: repeat(2, 1fr); row-gap: 1.5rem; }
 }
 
 /* ──────────────────────────  section shell  ────────────────────────── */
@@ -610,6 +675,17 @@ a { color: inherit; }
   color: var(--bg);
 }
 
+.btn--solid {
+  background: #9a2924;
+  border-color: #9a2924;
+  color: #ffffff;
+}
+.btn--solid:hover {
+  background: #7f201c;
+  border-color: #7f201c;
+  color: #ffffff;
+}
+
 .cta__note {
   margin-top: 1rem;
   font-size: .875rem;
@@ -650,30 +726,6 @@ a { color: inherit; }
   height: 1.125rem;
   fill: currentColor;
   flex: 0 0 auto;
-}
-
-/* ──────────────────────────  hero photograph  ────────────────────────── */
-
-.heroshot {
-  max-width: var(--shell);
-  margin: clamp(2.5rem, 6vw, 4rem) auto 0;
-  padding-inline: var(--gutter);
-}
-
-.heroshot img {
-  display: block;
-  width: 100%;
-  height: auto;
-  /* the source is 960px wide, so cap the upscale and crop rather than blur */
-  max-height: 60vh;
-  object-fit: cover;
-  background: var(--bg-subtle);
-}
-
-.statband {
-  max-width: var(--shell);
-  margin-inline: auto;
-  padding: 0 var(--gutter) clamp(3rem, 7vw, 5rem);
 }
 
 /* ──────────────────────────  crest in the wordmark  ────────────────────────── */

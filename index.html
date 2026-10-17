@@ -13,7 +13,8 @@
 
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#0f0f0f">
+<noscript><style>.topbar--over{background:#0f0f0f}</style></noscript>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,7 +26,7 @@
 
 <a class="skip" href="#obsah">Přeskočit na obsah</a>
 
-<header class="topbar">
+<header class="topbar topbar--over" id="topbar">
   <div class="topbar__inner">
     <a class="wordmark" href="#">
       <picture>
@@ -51,39 +52,31 @@
 <main id="obsah">
 
   <!-- ─────────────────────────  HERO  ───────────────────────── -->
-  <section class="hero">
-    <p class="eyebrow">Ženský futsal &middot; Malé Hoštice</p>
-    <h1 class="hero__title">Tequilky<br>Slavia</h1>
-    <p class="hero__lede">
-      Dvacet let přátelství, deset sezon v celorepublikové futsalové lize
-      a šest medailí — bez velkého klubu za zády.
-    </p>
-  </section>
+  <section class="hero" aria-labelledby="hero-title">
+    <img class="hero__photo" src="img/team-hero.jpg" width="960" height="443" fetchpriority="high"
+         alt="Hráčky Tequilek v hloučku na hřišti">
 
-  <figure class="heroshot">
-    <img src="img/team-hero.jpg" width="960" height="443" fetchpriority="high"
-         alt="Hráčky Tequilek se objímají v hloučku na hřišti po vítězném zápase">
-  </figure>
+    <div class="hero__inner">
+      <div class="hero__copy">
+        <p class="eyebrow">1.&nbsp;futsalová liga žen &nbsp;·&nbsp; Malé&nbsp;Hoštice</p>
+        <h1 class="hero__title" id="hero-title">Tequilky Slavia<br>Malé Hoštice</h1>
+        <p class="hero__lede">
+          Ženský futsalový tým, který spolu hraje přes dvacet let. Dvakrát
+          mistryně republiky, šest medailí z&nbsp;nejvyšší soutěže.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--solid" href="#nabor">Přidej se k nám</a>
+          <a class="btn" href="#podpora">Podpořte nás</a>
+        </div>
+      </div>
 
-  <section class="statband">
-    <dl class="stats">
-      <div class="stat">
-        <dt>let spolu</dt>
-        <dd><span class="stat__num">20</span><span class="stat__plus">+</span></dd>
-      </div>
-      <div class="stat">
-        <dt>sezon v lize</dt>
-        <dd><span class="stat__num">10</span></dd>
-      </div>
-      <div class="stat">
-        <dt>medailí</dt>
-        <dd><span class="stat__num">6</span></dd>
-      </div>
-      <div class="stat">
-        <dt>mistrovské tituly</dt>
-        <dd><span class="stat__num">2</span></dd>
-      </div>
-    </dl>
+      <dl class="stats">
+        <div class="stat"><dt>mistryně ČR</dt><dd>2×</dd></div>
+        <div class="stat"><dt>medailí</dt><dd>6</dd></div>
+        <div class="stat"><dt>sezon v&nbsp;1.&nbsp;lize</dt><dd>10</dd></div>
+        <div class="stat"><dt>let spolu</dt><dd>20+</dd></div>
+      </dl>
+    </div>
   </section>
 
   <!-- ─────────────────────────  PŘÍBĚH  ───────────────────────── -->
@@ -552,6 +545,14 @@
 
 <script>
   document.getElementById('rok').textContent = new Date().getFullYear();
+
+  (() => {
+    const bar = document.getElementById('topbar');
+    const hero = document.querySelector('.hero');
+    if (!('IntersectionObserver' in window) || !hero) { bar.classList.remove('topbar--over'); return; }
+    new IntersectionObserver(([entry]) => bar.classList.toggle('topbar--over', entry.isIntersecting),
+      { rootMargin: `-${bar.offsetHeight}px 0px 0px 0px` }).observe(hero);
+  })();
 </script>
 
 </body>
