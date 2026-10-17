@@ -12,6 +12,8 @@
   --faint:       #a3a3a3;
   --rule:        #e5e5e5;
   --rule-strong: #0f0f0f;
+  --cream:       #f6f2ec;
+  --cream-rule:  #e6ddd0;
 
   --measure: 34rem;        /* prose line length */
   --gutter:  clamp(1rem, 5vw, 4rem);
@@ -30,6 +32,8 @@
     --faint:       #6a6a6a;
     --rule:        #262626;
     --rule-strong: #f2f2f2;
+    --cream:       #15130f;
+    --cream-rule:  #2b2721;
   }
 }
 
@@ -42,6 +46,8 @@
   --faint:       #6a6a6a;
   --rule:        #262626;
   --rule-strong: #f2f2f2;
+  --cream:       #15130f;
+  --cream-rule:  #2b2721;
 }
 
 /* ──────────────────────────  base  ────────────────────────── */
@@ -248,14 +254,34 @@ a { color: inherit; }
 
 /* ──────────────────────────  section shell  ────────────────────────── */
 
+/* Every section runs full-bleed so it can carry its own background, and the
+   inline padding keeps its content on the same grid as the hero. Colour
+   separates the sections now, so there is no rule between them. */
 .section {
-  max-width: var(--shell);
-  margin-inline: auto;
-  padding: clamp(3.5rem, 8vw, 6rem) var(--gutter);
+  padding-block: clamp(3.5rem, 8vw, 6rem);
+  padding-inline: max(var(--gutter), calc((100% - var(--shell)) / 2 + var(--gutter)));
   display: grid;
   grid-template-columns: 9rem 1fr;
   gap: clamp(1.5rem, 4vw, 3.5rem);
-  border-top: 1px solid var(--rule);
+  /* restated so text follows tokens a band redefines (see .prose p) */
+  color: var(--text);
+}
+
+.section--cream {
+  background: var(--cream);
+  --rule: var(--cream-rule);
+}
+
+/* The recruitment call, in the crest's red. White on #9a2924 is 7.7:1. */
+.section--red {
+  background: #9a2924;
+  --bg:          #9a2924;
+  --ink:         #ffffff;
+  --text:        #f8eceb;
+  --muted:       #f0d4d0;
+  --faint:       #ecc9c4;
+  --rule:        #b65650;
+  --rule-strong: #ffffff;
 }
 
 .section__label {
@@ -285,9 +311,6 @@ a { color: inherit; }
    other section. Colours are literals, not var(--ink) — a custom property
    redeclared here would also apply to this rule's own declarations. */
 .section--invert {
-  max-width: none;
-  border-top: 0;
-  padding-inline: max(var(--gutter), calc((100% - var(--shell)) / 2 + var(--gutter)));
   background: #0f0f0f;
   /* Inherited colour is computed at :root, so restate it for the band. */
   color: var(--text);
@@ -665,4 +688,64 @@ a { color: inherit; }
   display: block;
   height: 1.75rem;
   width: auto;
+}
+
+/* ──────────────────────────  squad  ────────────────────────── */
+
+.subhead {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  margin: 0 0 1.25rem;
+  font-size: 1.25rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.subhead__count {
+  font-size: .8125rem;
+  letter-spacing: 0;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.roster + .subhead { margin-top: 3.5rem; }
+
+.roster {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr));
+  column-gap: 2rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.roster__item {
+  display: flex;
+  flex-direction: column;
+  gap: .125rem;
+  padding: .875rem 0;
+  border-top: 1px solid var(--rule);
+}
+
+.roster__name {
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 300;
+}
+.roster__name b { font-weight: 500; }
+
+.roster__meta {
+  font-size: .75rem;
+  letter-spacing: .01em;
+  color: var(--muted);
+}
+
+/* Twenty names in one column is a long scroll on a phone — two fit. */
+@media (max-width: 40rem) {
+  .roster {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 1.25rem;
+  }
 }
