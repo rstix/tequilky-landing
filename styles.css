@@ -150,6 +150,7 @@ a { color: inherit; }
   font-size: .8125rem;
   color: var(--muted);
   text-decoration: none;
+  white-space: nowrap;
   transition: color .15s ease;
 }
 .topnav a:hover { color: var(--ink); }
@@ -179,8 +180,8 @@ a { color: inherit; }
 
 /* The nav is secondary to the page itself — below 40rem the page reads
    top-to-bottom anyway, so we hide the links and keep the one CTA. */
-/* measured: six links and the CTA stop fitting just under 46rem */
-@media (max-width: 46rem) {
+/* measured: six links and the CTA need about 47rem (750px) on one line */
+@media (max-width: 48rem) {
   .topnav li:not(:last-child) { display: none; }
   .topnav__cta { margin-left: 0; }
 }
