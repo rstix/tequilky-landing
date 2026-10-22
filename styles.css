@@ -711,7 +711,13 @@ a { color: inherit; }
 
 /* ──────────────────────────  footer social  ────────────────────────── */
 
-.footer__social { margin-top: 1.25rem; }
+.footer__social {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: .75rem;
+  margin-top: 1.25rem;
+}
 
 .footer__social a {
   display: inline-flex;
