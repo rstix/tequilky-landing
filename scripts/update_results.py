@@ -139,7 +139,7 @@ def main():
             sys.exit(f"unknown fixture on lz: {m['home']} – {m['away']}, nothing written")
         f["kickoff"] = m["kickoff"].isoformat()             # lz is the league's own schedule
         f["venue"] = m["venue"] or f["venue"]
-        f["score"] = m["score"]
+        f["score"] = m["score"] or f["score"]               # keep a hand-entered score until lz has one
     fixtures.sort(key=lambda f: f["kickoff"])
 
     original = PAGE.read_text(encoding="utf-8")

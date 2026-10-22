@@ -616,6 +616,12 @@
       <h2 class="section__title">Hráčky a realizační tým</h2>
 
       <h3 class="subhead">Hráčky <span class="subhead__count">20</span></h3>
+      <details class="reveal">
+        <summary class="reveal__toggle">
+          <span class="reveal__show">Zobrazit hráčky</span>
+          <span class="reveal__hide">Skrýt hráčky</span>
+        </summary>
+        <div class="reveal__body">
       <ul class="squad">
           <li class="player">
             <span class="player__mono" aria-hidden="true">RB</span>
@@ -709,8 +715,16 @@
         <li><span class="badge badge--role" aria-hidden="true">B</span>brankářka</li>
         <li><span class="badge badge--role" aria-hidden="true">T</span>hrající trenérka</li>
       </ul>
+        </div>
+      </details>
 
-      <h3 class="subhead">Realizační tým</h3>
+      <h3 class="subhead">Realizační tým <span class="subhead__count">4</span></h3>
+      <details class="reveal">
+        <summary class="reveal__toggle">
+          <span class="reveal__show">Zobrazit realizační tým</span>
+          <span class="reveal__hide">Skrýt realizační tým</span>
+        </summary>
+        <div class="reveal__body">
       <ul class="staff">
         <li class="staff__row">
           <span class="staff__name">Eva Hýlová</span>
@@ -729,6 +743,8 @@
           <span class="staff__role">asistentka</span>
         </li>
       </ul>
+        </div>
+      </details>
     </div>
   </section>
 
@@ -932,7 +948,7 @@
   (() => {
     const rows = [...document.querySelectorAll('#fixtures .fixture')];
     const now = Date.now();
-    const SHOW = 6;
+    const SHOW = 4;
     let next = rows.findIndex((r) => new Date(r.dataset.kickoff).getTime() + 2 * 3600e3 > now);
     rows.forEach((r, i) => r.classList.toggle('is-past', next === -1 || i < next));
     if (next === -1) return;

@@ -771,7 +771,10 @@ a { color: inherit; }
   font-variant-numeric: tabular-nums;
 }
 
-.squad-legend + .subhead { margin-top: 3.5rem; }
+/* Players and staff each sit behind a toggle right under their heading. */
+.subhead + .reveal { margin-top: 0; }
+.subhead + .reveal .reveal__body { margin-top: 1.5rem; }
+.reveal + .subhead { margin-top: 3rem; }
 
 .btn:disabled { opacity: .6; cursor: progress; }
 
