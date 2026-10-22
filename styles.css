@@ -93,7 +93,7 @@ strong { color: var(--ink); font-weight: 500; }
 
 a { color: inherit; }
 
-:where(a, button):focus-visible {
+:where(a, button, summary, input, select, textarea):focus-visible {
   outline: 2px solid var(--ink);
   outline-offset: 3px;
   border-radius: 2px;
@@ -665,9 +665,12 @@ a { color: inherit; }
   padding: .8125rem 1.75rem;
   border: 1px solid currentColor;
   border-radius: 999px;
+  background: transparent;
   color: var(--ink);
+  font-family: inherit;
   font-size: .9375rem;
   text-decoration: none;
+  cursor: pointer;
   transition: background-color .15s ease, color .15s ease;
 }
 .btn:hover {
@@ -801,3 +804,200 @@ a { color: inherit; }
     column-gap: 1.25rem;
   }
 }
+
+.btn:disabled { opacity: .6; cursor: progress; }
+
+/* ──────────────────────────  national-team panel  ────────────────────────── */
+
+.reveal { margin-top: 2rem; }
+
+.reveal__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .8125rem 1.5rem;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: .9375rem;
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+}
+.reveal__toggle::-webkit-details-marker { display: none; }
+.reveal__toggle::after {
+  content: "";
+  width: .5rem;
+  height: .5rem;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform .2s ease;
+}
+.reveal[open] .reveal__toggle::after { transform: translateY(2px) rotate(-135deg); }
+.reveal__hide,
+.reveal[open] .reveal__show { display: none; }
+.reveal[open] .reveal__hide { display: inline; }
+
+.reveal__body { margin-top: .5rem; }
+
+/* ──────────────────────────  gallery  ────────────────────────── */
+
+.gallery {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-flow: dense;
+  gap: .5rem;
+}
+
+/* the lead photo takes a 2x2 block */
+.gallery li:first-child { grid-column: span 2; grid-row: span 2; }
+
+.gallery a {
+  display: block;
+  height: 100%;
+  overflow: hidden;
+  background: var(--cream-rule);
+}
+
+.gallery img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  transition: transform .35s ease;
+}
+.gallery li:first-child img { aspect-ratio: auto; }
+.gallery a:hover img { transform: scale(1.03); }
+
+.gallery--collapsed li:nth-child(n+14) { display: none; }
+
+.gallery__more { margin-top: 1.5rem; }
+
+@media (max-width: 52rem) {
+  .gallery { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 40rem) {
+  .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* lightbox --------------------------------------------------- */
+
+.lightbox {
+  --ink: #ffffff;
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: #0f0f0ff0;
+  color: #ffffff;
+}
+.lightbox[open] { display: grid; place-items: center; }
+.lightbox::backdrop { background: #0f0f0fb3; }
+
+.lightbox__img {
+  max-width: min(92vw, 1600px);
+  max-height: 84dvh;
+  object-fit: contain;
+}
+
+.lightbox__btn {
+  position: absolute;
+  width: 3.5rem;
+  height: 3.5rem;
+  border: 0;
+  background: transparent;
+  color: #ffffff;
+  font: 300 2.75rem/1 var(--font);
+  cursor: pointer;
+}
+.lightbox__close { top: .5rem; right: .5rem; }
+.lightbox__prev  { left: .25rem;  top: 50%; transform: translateY(-50%); }
+.lightbox__next  { right: .25rem; top: 50%; transform: translateY(-50%); }
+
+.lightbox__count {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 1rem;
+  text-align: center;
+  font-size: .8125rem;
+  color: #ffffffb3;
+}
+
+/* ──────────────────────────  contact form  ────────────────────────── */
+
+.contact {
+  display: grid;
+  gap: 1.25rem;
+  max-width: 40rem;
+  margin-top: 2rem;
+}
+
+.field { display: grid; gap: .375rem; }
+
+.field-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+@media (max-width: 40rem) {
+  .field-row { grid-template-columns: 1fr; }
+}
+
+.field label {
+  font-size: .8125rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+.field__opt { font-weight: 400; color: var(--muted); }
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: .75rem .875rem;
+  border: 1px solid var(--field-line);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: 1rem;
+}
+.field textarea { resize: vertical; min-height: 8rem; }
+
+/* input outlines need 3:1 against the section, which the decorative rules don't */
+:root { --field-line: #8f877c; }
+
+.contact__trap { position: absolute; left: -9999px; width: 1px; height: 1px; }
+
+.contact__note { font-size: .8125rem; color: var(--muted); }
+
+.contact__send {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+}
+.contact__status { font-size: .9375rem; color: var(--ink); }
+
+/* ──────────────────────────  thank-you page  ────────────────────────── */
+
+.thanks {
+  min-height: 100dvh;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 1.25rem;
+  padding: 2rem var(--gutter);
+  text-align: center;
+}
+.thanks__crest { width: 4.5rem; height: auto; }
+.thanks__text { max-width: 28rem; color: var(--text); }
