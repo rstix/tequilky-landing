@@ -179,7 +179,8 @@ a { color: inherit; }
 
 /* The nav is secondary to the page itself — below 40rem the page reads
    top-to-bottom anyway, so we hide the links and keep the one CTA. */
-@media (max-width: 40rem) {
+/* measured: six links and the CTA stop fitting just under 46rem */
+@media (max-width: 46rem) {
   .topnav li:not(:last-child) { display: none; }
   .topnav__cta { margin-left: 0; }
 }
@@ -1128,15 +1129,46 @@ a { color: inherit; }
 .standings th.num:first-child, .standings td.num:first-child { text-align: left; width: 2.5rem; color: var(--muted); }
 .standings tbody tr:last-child > * { border-bottom: 1px solid var(--rule); }
 
+/* The table reads in negative: a dark panel that carries its own tokens,
+   with our row in the crest red running edge to edge. */
+.standings-panel {
+  background: #0f0f0f;
+  color: #ffffffd9;
+  padding: .25rem 0 .5rem;
+  --ink:         #ffffff;
+  --muted:       #ffffffb3;
+  --faint:       #ffffff99;
+  --rule:        #ffffff1f;
+  --rule-strong: #ffffff1f;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .standings-panel { background: #1c1c1c; }
+}
+:root[data-theme="dark"] .standings-panel { background: #1c1c1c; }
+
+.standings-panel .standings thead th { border-top: 0; }
+.standings-panel .standings tbody tr:last-child > * { border-bottom: 0; }
+.standings :is(th, td):first-child { padding-left: 1.25rem; }
+.standings :is(th, td):last-child  { padding-right: 1.25rem; }
+
 /* our row */
-.standings .is-us > * { background: var(--cream); font-weight: 600; color: var(--ink); }
-.standings .is-us > :first-child { box-shadow: inset 3px 0 #9a2924; }
-.standings :is(th, td):first-child { padding-left: .75rem; }
+.standings .is-us > * { background: #9a2924; color: #ffffff; font-weight: 600; }
+.standings .is-us td.num:first-child { color: #ffffff; }
 
 .standings__source { margin-top: 1rem; }
 
 @media (max-width: 40rem) {
+  .standings :is(th, td):first-child { padding-left: .875rem; }
+  .standings :is(th, td):last-child  { padding-right: .875rem; }
   .standings .opt { display: none; }
   .standings .num { width: 2.75rem; }
   .standings th, .standings td { padding-right: .5rem; }
+}
+
+/* ──────────────────────────  full club name in the bar  ────────────────────────── */
+
+.wordmark__name { display: inline-block; line-height: 1.2; }
+
+@media (max-width: 56rem) {
+  .wordmark__place { display: block; font-size: .8125rem; font-weight: 400; opacity: .75; }
 }
