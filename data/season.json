@@ -1,0 +1,226 @@
+{
+  "season": "2026/27",
+  "source": "https://lz.futsalliga.cz/matches/2027",
+  "fixtures": [
+    {
+      "round": 1,
+      "kickoff": "2026-11-14T10:00:00+01:00",
+      "home": "Tequilky Slavia Malé Hoštice",
+      "away": "Technika Praha",
+      "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/d84311a9-0695-460b-85e2-a039a6db8b76",
+      "venue": "SH Malé Hoštice",
+      "score": null,
+      "postponed": false
+    },
+    {
+      "round": 1,
+      "kickoff": "2026-11-14T14:15:00+01:00",
+      "home": "Tequilky Slavia Malé Hoštice",
+      "away": "SK Interobal Plzeň",
+      "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/5dfc3b13-0cd0-4b2e-b434-cc2c584d3b16",
+      "venue": "SH Malé Hoštice",
+      "score": null,
+      "postponed": false
+    },
+    {
+      "round": 1,
+      "kickoff": "2026-11-22T10:00:00+01:00",
+      "home": "AC Gamaspol Jeseník",
+      "away": "Tequilky Slavia Malé Hoštice",
+      "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/8d776dad-2007-4095-b7e4-950340701d68",
+      "venue": "MSH Jeseník",
+      "score": null,
+      "postponed": false
+    },
+    {
+      "round": 2,
+      "kickoff": "2026-11-28T14:30:00+01:00",
+      "home": "Tequilky Slavia Malé Hoštice",
+      "away": "Futsal Pardubice",
+      "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/b7596afc-0267-4f52-8699-df0ae68aad72",
+      "venue": "MSH Jeseník",
+      "score": null,
+      "postponed": false
+    },
+    {
+      "round": 2,
+      "kickoff": "2026-11-28T16:15:00+01:00",
+      "home": "Tequilky Slavia Malé Hoštice",
+      "away": "SK Olympik Mělník",
+      "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/9a6e532f-68d3-45fc-a25f-d8786c55a112",
+      "venue": "MSH Jeseník",
+      "score": null,
+      "postponed": false
+    },
+    {
+      "round": 3,
+      "kickoff": "2026-12-06T11:00:00+01:00",
+      "home": "FC Baník Ostrava",
+      "away": "Tequilky Slavia Malé Hoštice",
+      "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/d4568756-89a7-4b81-8faa-0a77a43f16f5",
+      "venue": "SH SPŠEI Ostrava, Sokolská",
+      "score": null,
+      "postponed": false
+    },
+    {
+      "round": 3,
+      "kickoff": "2026-12-06T14:00:00+01:00",
+      "home": "Nástěnky Brno",
+      "away": "Tequilky Slavia Malé Hoštice",
+      "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/703977ea-aa71-4af2-bfdd-33c71366dcf8",
+      "venue": "SH SPŠEI Ostrava, Sokolská",
+      "score": null,
+      "postponed": false
+    },
+    {
+      "round": 4,
+      "kickoff": "2026-12-13T11:15:00+01:00",
+      "home": "Tequilky Slavia Malé Hoštice",
+      "away": "FC Tango Hodonín",
+      "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/c02da43b-2ac9-4bc5-90ab-ee22a92615bf",
+      "venue": "SH Mikulovice",
+      "score": null,
+      "postponed": false
+    },
+    {
+      "round": 4,
+      "kickoff": "2026-12-13T13:00:00+01:00",
+      "home": "Tequilky Slavia Malé Hoštice",
+      "away": "Futsalová škola Třebíč",
+      "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/46db663d-66c1-4a49-866c-639f32a96985",
+      "venue": "SH Mikulovice",
+      "score": null,
+      "postponed": false
+    },
+    {
+      "round": 5,
+      "kickoff": "2026-12-19T10:00:00+01:00",
+      "home": "SK Slavia Praha",
+      "away": "Tequilky Slavia Malé Hoštice",
+      "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/1a3bbb6b-12f3-429b-8b3c-2713fbb897b9",
+      "venue": "SH Slavia",
+      "score": null,
+      "postponed": false
+    },
+    {
+      "round": 5,
+      "kickoff": "2026-12-19T13:00:00+01:00",
+      "home": "SK Rapid Ústí nad Labem",
+      "away": "Tequilky Slavia Malé Hoštice",
+      "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/da1e88f5-eb88-4a2e-a022-d42c7f635288",
+      "venue": "SH SK Slavia Praha, Eden",
+      "score": null,
+      "postponed": false
+    },
+    {
+      "round": 6,
+      "kickoff": "2027-01-10T11:15:00+01:00",
+      "home": "Technika Praha",
+      "away": "Tequilky Slavia Malé Hoštice",
+      "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/284f3023-fc20-4dc5-ac01-6e2af327a28a",
+      "venue": "SH Lokomotiva Plzeň č. 2",
+      "score": null,
+      "postponed": false
+    },
+    {
+      "round": 6,
+      "kickoff": "2027-01-10T14:15:00+01:00",
+      "home": "SK Interobal Plzeň",
+      "away": "Tequilky Slavia Malé Hoštice",
+      "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/03e36bae-bcf1-4f45-8696-f1339438c720",
+      "venue": "SH Lokomotiva Plzeň č. 2",
+      "score": null,
+      "postponed": false
+    },
+    {
+      "round": 7,
+      "kickoff": "2027-01-16T10:00:00+01:00",
+      "home": "SK Olympik Mělník",
+      "away": "Tequilky Slavia Malé Hoštice",
+      "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/2cfc77b3-68e5-4d77-a460-24e6c9083f09",
+      "venue": "SH Gymnázium Mělník",
+      "score": null,
+      "postponed": false
+    },
+    {
+      "round": 7,
+      "kickoff": "2027-01-16T13:00:00+01:00",
+      "home": "Futsal Pardubice",
+      "away": "Tequilky Slavia Malé Hoštice",
+      "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/c58ed102-94c1-4a6f-acff-14eb124d2d56",
+      "venue": "SH Gymnázium Mělník",
+      "score": null,
+      "postponed": false
+    },
+    {
+      "round": 7,
+      "kickoff": "2027-01-23T10:00:00+01:00",
+      "home": "Tequilky Slavia Malé Hoštice",
+      "away": "AC Gamaspol Jeseník",
+      "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/354cdac4-4621-4420-bcd6-e3a7f6cb6330",
+      "venue": "SH Malé Hoštice",
+      "score": null,
+      "postponed": false
+    },
+    {
+      "round": 8,
+      "kickoff": "2027-01-30T10:00:00+01:00",
+      "home": "Tequilky Slavia Malé Hoštice",
+      "away": "FC Baník Ostrava",
+      "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/d53e9dee-e918-43a7-8b0f-e8b0266aa697",
+      "venue": "SH Malé Hoštice",
+      "score": null,
+      "postponed": false
+    },
+    {
+      "round": 8,
+      "kickoff": "2027-01-30T14:15:00+01:00",
+      "home": "Tequilky Slavia Malé Hoštice",
+      "away": "Nástěnky Brno",
+      "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/b4624d74-bbae-42eb-8f2b-318c480d65da",
+      "venue": "SH Malé Hoštice",
+      "score": null,
+      "postponed": false
+    },
+    {
+      "round": 9,
+      "kickoff": "2027-02-07T11:15:00+01:00",
+      "home": "FC Tango Hodonín",
+      "away": "Tequilky Slavia Malé Hoštice",
+      "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/2dbec8fb-f33e-45fd-93b7-a67aaa471aac",
+      "venue": "SH Spartak Třebíč",
+      "score": null,
+      "postponed": false
+    },
+    {
+      "round": 9,
+      "kickoff": "2027-02-07T14:15:00+01:00",
+      "home": "Futsalová škola Třebíč",
+      "away": "Tequilky Slavia Malé Hoštice",
+      "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/78aeba1f-33de-43b8-a59c-03aa3f6cfbc2",
+      "venue": "SH Spartak Třebíč",
+      "score": null,
+      "postponed": false
+    },
+    {
+      "round": 10,
+      "kickoff": "2027-02-13T10:00:00+01:00",
+      "home": "Tequilky Slavia Malé Hoštice",
+      "away": "SK Rapid Ústí nad Labem",
+      "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/663a26d3-c6f8-49a6-ab1d-995095beccd5",
+      "venue": "SH Malé Hoštice",
+      "score": null,
+      "postponed": false
+    },
+    {
+      "round": 10,
+      "kickoff": "2027-02-13T14:15:00+01:00",
+      "home": "Tequilky Slavia Malé Hoštice",
+      "away": "SK Slavia Praha",
+      "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/56819f9c-60e2-479b-9a45-7cd178586433",
+      "venue": "SH Malé Hoštice",
+      "score": null,
+      "postponed": false
+    }
+  ]
+}

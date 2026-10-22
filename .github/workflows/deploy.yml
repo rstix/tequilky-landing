@@ -3,12 +3,17 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
-  workflow_dispatch: # Manual trigger
+  workflow_dispatch: # Manual trigger: also pulls the latest results first
+  # Matches are played at weekends and the league posts the scores by Sunday
+  # night, Monday at the latest. Times are UTC (22:00 CET Sunday, then 7:00
+  # and 19:00 CET Monday). Runs with nothing new end without deploying.
+  schedule:
+    - cron: "0 21 * * 0"
+    - cron: "0 6 * * 1"
+    - cron: "0 18 * * 1"
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 # Let a running deploy finish rather than cancelling it — a half-published
 # site is worse than a slightly stale one.
@@ -17,13 +22,59 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  # Pull Tequilky's scores and the league table from lz.futsalliga.cz and
+  # commit them. A failure here (site down, layout changed) fails the run, so
+  # GitHub emails the repo owner; the live site keeps its last good state.
+  results:
+    if: github.event_name != 'push'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      changed: ${{ steps.commit.outputs.changed }}
+      sha: ${{ steps.commit.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v6.0.2
+
+      - name: Update results
+        run: python3 scripts/update_results.py
+
+      # A push made with GITHUB_TOKEN doesn't start another workflow run, so
+      # the deploy job below publishes this commit itself.
+      - name: Commit changes
+        id: commit
+        run: |
+          git add index.html data/season.json
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "results: update from futsalliga.cz"
+          git pull --rebase
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    needs: results
+    # Pushes and manual runs always deploy (even if the results step failed);
+    # scheduled runs only when they committed something.
+    if: >-
+      !cancelled() && (github.event_name != 'schedule' ||
+      needs.results.outputs.changed == 'true')
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v6.0.2
+        with:
+          ref: ${{ needs.results.outputs.sha || github.sha }}
 
       - uses: actions/configure-pages@v6.0.0
 
@@ -36,10 +87,13 @@ jobs:
             --exclude '.git' \
             --exclude '.github' \
             --exclude '_site' \
+            --exclude 'data' \
+            --exclude 'scripts' \
             ./ _site/
           # GitHub Pages caches every file for 10 minutes, so a browser could pair
           # new HTML with yesterday's stylesheet. Stamp the link with the commit.
-          sed -i "s|href=\"styles.css\"|href=\"styles.css?v=${GITHUB_SHA::8}\"|" _site/*.html
+          sha=$(git rev-parse --short=8 HEAD)
+          sed -i "s|href=\"styles.css\"|href=\"styles.css?v=${sha}\"|" _site/*.html
           grep -o 'styles.css?v=[0-9a-f]*' _site/*.html
           echo "Publishing $(find _site -type f | wc -l) files"
 
