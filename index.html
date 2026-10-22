@@ -978,8 +978,12 @@
         if (!res.ok || String(out.success) !== 'true') throw new Error(out.message || res.status);
         form.reset();
         status.textContent = 'Děkujeme, zpráva odešla.';
-      } catch {
-        status.innerHTML = 'Zprávu se nepodařilo odeslat. Napište nám prosím přímo na <a href="mailto:info@futsal-tequilky.cz">info@futsal-tequilky.cz</a>.';
+      } catch (err) {
+        console.warn('Contact form:', err.message);   // FormSubmit's own reason, for whoever debugs this
+        const direct = 'Napište nám prosím přímo na <a href="mailto:info@futsal-tequilky.cz">info@futsal-tequilky.cz</a>.';
+        status.innerHTML = /activat/i.test(err.message)
+          ? `Formulář zatím není aktivovaný. ${direct}`
+          : `Zprávu se nepodařilo odeslat. ${direct}`;
       } finally {
         send.disabled = false;
       }
