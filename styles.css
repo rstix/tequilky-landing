@@ -1206,3 +1206,27 @@ a { color: inherit; }
   .player__name { flex-basis: 100%; }
   .player__last { overflow-wrap: anywhere; }
 }
+
+/* ──────────────────────────  results  ────────────────────────── */
+/* Added round by round by the Monday results task: a played match gets
+   class has-result plus is-win / is-draw / is-loss, and the dash between
+   the teams becomes <span class="fixture__score">3:1</span>. */
+
+.fixture__score {
+  display: inline-block;
+  min-width: 2.75rem;
+  margin: 0 .375rem;
+  padding: .05rem .45rem;
+  border-radius: 4px;
+  background: var(--ink);
+  color: var(--bg);
+  font-size: .9375rem;
+  font-weight: 600;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.fixture.is-win  .fixture__score { background: #9a2924; color: #ffffff; }
+.fixture.is-draw .fixture__score { background: var(--muted); color: var(--bg); }
+
+/* a result is worth reading, so a played match keeps its team names dark */
+.fixture.has-result .fixture__teams { color: var(--ink); }
