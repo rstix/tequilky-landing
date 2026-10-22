@@ -37,7 +37,11 @@ jobs:
             --exclude '.github' \
             --exclude '_site' \
             ./ _site/
-          echo "Publishing:" && find _site -type f | sort
+          # GitHub Pages caches every file for 10 minutes, so a browser could pair
+          # new HTML with yesterday's stylesheet. Stamp the link with the commit.
+          sed -i "s|href=\"styles.css\"|href=\"styles.css?v=${GITHUB_SHA::8}\"|" _site/*.html
+          grep -o 'styles.css?v=[0-9a-f]*' _site/*.html
+          echo "Publishing $(find _site -type f | wc -l) files"
 
       - uses: actions/upload-pages-artifact@v5.0.0
         with:
