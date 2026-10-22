@@ -1001,3 +1001,136 @@ a { color: inherit; }
 }
 .thanks__crest { width: 4.5rem; height: auto; }
 .thanks__text { max-width: 28rem; color: var(--text); }
+
+/* ──────────────────────────  fixtures  ────────────────────────── */
+
+.subhead--spaced { margin-top: 3.5rem; }
+
+.link {
+  color: var(--ink);
+  font-size: .9375rem;
+  text-decoration: underline;
+  text-underline-offset: .2em;
+  text-decoration-thickness: 1px;
+}
+.link:hover { text-decoration-thickness: 2px; }
+
+/* the next match, lifted out of the list by the script */
+.next-match {
+  margin: 2rem 0 3rem;
+  padding: 1.5rem 1.75rem;
+  border-left: 3px solid #9a2924;
+  background: var(--cream);
+}
+.next-match__label {
+  font-size: .6875rem;
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: #9a2924;
+}
+.next-match__teams {
+  margin-top: .5rem;
+  font-size: clamp(1.375rem, 3vw, 1.75rem);
+  font-weight: 300;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+.next-match__teams b { font-weight: 600; }
+.next-match__when { margin-top: .375rem; font-size: .9375rem; color: var(--muted); }
+
+.fixtures {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.fixture {
+  display: grid;
+  grid-template-columns: 11rem minmax(0, 1fr) auto;
+  align-items: baseline;
+  column-gap: 1.25rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--rule);
+}
+
+.fixture__when { display: flex; flex-direction: column; gap: .125rem; }
+.fixture__day  { font-size: .9375rem; color: var(--ink); font-variant-numeric: tabular-nums; }
+.fixture__time { font-size: .8125rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+.fixture__match { display: flex; flex-direction: column; gap: .125rem; min-width: 0; }
+.fixture__teams { font-size: 1.0625rem; color: var(--ink); }
+.fixture__teams b { font-weight: 600; }
+.fixture__meta  { font-size: .8125rem; color: var(--muted); }
+
+.fixture__link {
+  font-size: .8125rem;
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: .2em;
+}
+.fixture__link:hover { color: var(--ink); }
+
+.fixture.is-past :is(.fixture__day, .fixture__teams) { color: var(--muted); }
+.fixture.is-next .fixture__day { color: #9a2924; font-weight: 500; }
+.fixture.is-folded { display: none; }
+
+.fixtures__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 40rem) {
+  .fixture { grid-template-columns: minmax(0, 1fr) auto; row-gap: .375rem; }
+  .fixture__when { grid-column: 1 / -1; flex-direction: row; gap: .625rem; }
+  .next-match { padding: 1.25rem; }
+}
+
+/* ──────────────────────────  standings  ────────────────────────── */
+
+.standings__note { font-size: .875rem; color: var(--muted); margin: -.5rem 0 1.25rem; }
+
+.standings {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .9375rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.standings th,
+.standings td {
+  padding: .75rem .75rem .75rem 0;
+  border-top: 1px solid var(--rule);
+  text-align: left;
+  font-weight: 400;
+}
+.standings thead th {
+  border-top: 1px solid var(--rule-strong);
+  font-size: .6875rem;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.standings abbr { text-decoration: none; cursor: help; }
+.standings tbody th { color: var(--ink); }
+.standings .num { text-align: right; width: 3.5rem; }
+.standings th.num:first-child, .standings td.num:first-child { text-align: left; width: 2.5rem; color: var(--muted); }
+.standings tbody tr:last-child > * { border-bottom: 1px solid var(--rule); }
+
+/* our row */
+.standings .is-us > * { background: var(--cream); font-weight: 600; color: var(--ink); }
+.standings .is-us > :first-child { box-shadow: inset 3px 0 #9a2924; }
+.standings :is(th, td):first-child { padding-left: .75rem; }
+
+.standings__source { margin-top: 1rem; }
+
+@media (max-width: 40rem) {
+  .standings .opt { display: none; }
+  .standings .num { width: 2.75rem; }
+  .standings th, .standings td { padding-right: .5rem; }
+}
