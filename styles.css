@@ -771,46 +771,7 @@ a { color: inherit; }
   font-variant-numeric: tabular-nums;
 }
 
-.roster + .subhead { margin-top: 3.5rem; }
-
-.roster {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr));
-  column-gap: 2rem;
-  border-bottom: 1px solid var(--rule);
-}
-
-.roster__item {
-  display: flex;
-  flex-direction: column;
-  gap: .125rem;
-  padding: .875rem 0;
-  border-top: 1px solid var(--rule);
-}
-
-.roster__name {
-  color: var(--ink);
-  font-size: 1rem;
-  font-weight: 300;
-}
-.roster__name b { font-weight: 500; }
-
-.roster__meta {
-  font-size: .75rem;
-  letter-spacing: .01em;
-  color: var(--muted);
-}
-
-/* Twenty names in one column is a long scroll on a phone — two fit. */
-@media (max-width: 40rem) {
-  .roster {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 1.25rem;
-  }
-}
+.squad-legend + .subhead { margin-top: 3.5rem; }
 
 .btn:disabled { opacity: .6; cursor: progress; }
 
@@ -1171,4 +1132,89 @@ a { color: inherit; }
 
 @media (max-width: 56rem) {
   .wordmark__place { display: block; font-size: .8125rem; font-weight: 400; opacity: .75; }
+}
+
+/* ──────────────────────────  squad cards  ────────────────────────── */
+
+.squad {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: .75rem;
+}
+
+/* Every card is one row — roles are badges, not an extra line — so all
+   twenty come out the same height. */
+.player {
+  display: flex;
+  align-items: center;
+  gap: .875rem;
+  min-height: 4.75rem;
+  padding: 1rem;
+  background: var(--cream);
+}
+
+.player__mono {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--cream-rule);
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: .875rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+
+.player__name {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+  color: var(--ink);
+}
+.player__first { font-size: .8125rem; color: var(--muted); }
+.player__last  { font-size: 1rem; font-weight: 600; }
+
+.player__badges { flex: 0 0 auto; display: flex; gap: .25rem; }
+
+.badge {
+  display: inline-grid;
+  place-items: center;
+  width: 1.375rem;
+  height: 1.375rem;
+  border-radius: 50%;
+  font-size: .6875rem;
+  font-weight: 600;
+  line-height: 1;
+}
+.badge--rep  { background: #9a2924; color: #ffffff; }
+.badge--role { border: 1px solid var(--ink); color: var(--ink); }
+
+.squad-legend {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1.5rem;
+  font-size: .8125rem;
+  color: var(--muted);
+}
+.squad-legend li { display: inline-flex; align-items: center; gap: .5rem; }
+
+/* Phones: two columns; the monogram gives way so long surnames fit,
+   and the badges sit under the name. */
+@media (max-width: 40rem) {
+  .squad { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
+  .player { flex-wrap: wrap; align-items: flex-start; gap: .5rem; min-height: 0; padding: .75rem; }
+  .player__mono { display: none; }
+  .player__name { flex-basis: 100%; }
+  .player__last { overflow-wrap: anywhere; }
 }
