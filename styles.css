@@ -1060,6 +1060,9 @@ a { color: inherit; }
 
 /* ──────────────────────────  standings  ────────────────────────── */
 
+/* The table has a full-bleed dark band of its own (#tabulka, a
+   section--invert), so it reads as part of the page, not a box dropped into
+   a white section. Colours come from the band's tokens. */
 .standings__note { font-size: .875rem; color: var(--muted); margin: -.5rem 0 1.25rem; }
 
 .standings {
@@ -1071,48 +1074,33 @@ a { color: inherit; }
 
 .standings th,
 .standings td {
-  padding: .75rem .75rem .75rem 0;
+  padding: .625rem .75rem .625rem 0;
   border-top: 1px solid var(--rule);
   text-align: left;
   font-weight: 400;
 }
+.standings :is(th, td):first-child { padding-left: 1.25rem; }
+.standings :is(th, td):last-child  { padding-right: 1.25rem; }
+
 .standings thead th {
-  border-top: 1px solid var(--rule-strong);
+  padding-top: .875rem;
+  padding-bottom: .75rem;
+  border-top: 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 25%, transparent);
   font-size: .6875rem;
   font-weight: 500;
   letter-spacing: .12em;
   text-transform: uppercase;
   color: var(--faint);
 }
+.standings tbody tr:first-child > * { border-top: 0; }
+
 .standings abbr { text-decoration: none; cursor: help; }
 .standings tbody th { color: var(--ink); }
 .standings .num { text-align: right; width: 3.5rem; }
 .standings th.num:first-child, .standings td.num:first-child { text-align: left; width: 2.5rem; color: var(--muted); }
-.standings tbody tr:last-child > * { border-bottom: 1px solid var(--rule); }
 
-/* The table reads in negative: a dark panel that carries its own tokens,
-   with our row in the crest red running edge to edge. */
-.standings-panel {
-  background: #0f0f0f;
-  color: #ffffffd9;
-  padding: .25rem 0 .5rem;
-  --ink:         #ffffff;
-  --muted:       #ffffffb3;
-  --faint:       #ffffff99;
-  --rule:        #ffffff1f;
-  --rule-strong: #ffffff1f;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .standings-panel { background: #1c1c1c; }
-}
-:root[data-theme="dark"] .standings-panel { background: #1c1c1c; }
-
-.standings-panel .standings thead th { border-top: 0; }
-.standings-panel .standings tbody tr:last-child > * { border-bottom: 0; }
-.standings :is(th, td):first-child { padding-left: 1.25rem; }
-.standings :is(th, td):last-child  { padding-right: 1.25rem; }
-
-/* our row */
+/* our row, in the crest red edge to edge */
 .standings .is-us > * { background: #9a2924; color: #ffffff; font-weight: 600; }
 .standings .is-us td.num:first-child { color: #ffffff; }
 
