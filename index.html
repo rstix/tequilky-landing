@@ -836,10 +836,15 @@
         <p class="prose__lead">Zpráva přijde přímo týmu na info@futsal-tequilky.cz.</p>
       </div>
 
-      <form class="contact" id="contact-form" action="https://formsubmit.co/info@futsal-tequilky.cz" method="POST">
+      <noscript>
+        <style>#contact-form { display: none; }</style>
+        <p class="prose__lead">Napište nám na <a class="link" href="mailto:info@futsal-tequilky.cz">info@futsal-tequilky.cz</a>.</p>
+      </noscript>
+
+      <form class="contact" id="contact-form" novalidate>
         <input type="hidden" name="_subject" value="Zpráva z webu futsal-tequilky.cz">
         <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_next" value="https://futsal-tequilky.cz/dekujeme.html">
+        <input type="hidden" name="_blacklist" value="bitcoin, crypto, casino, viagra, backlinks, SEO services, porn">
         <input class="contact__trap" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
 
         <div class="field">
@@ -985,8 +990,18 @@
 
   // Contact: the "Napište nám" buttons preselect a topic; the form posts to
   // FormSubmit in the background so the visitor stays on the page.
+  // Spam is kept out without asking anyone to click anything:
+  //  - the endpoint is assembled here, so bots scanning the HTML for a
+  //    FormSubmit action find nothing to post to;
+  //  - a hidden field only bots fill in;
+  //  - a time floor: a person needs more than 3 s to fill the form, a bot doesn't;
+  //  - FormSubmit drops messages carrying the _blacklist phrases.
+  // A caught bot is told the message went out, so it has no reason to retry.
   (() => {
     const form = document.getElementById('contact-form');
+    const ENDPOINT = ['https://formsubmit.co/ajax/', 'info', '@', 'futsal-tequilky.cz'].join('');
+    const loadedAt = Date.now();
+    const SENT = 'Děkujeme, zpráva byla odeslána.';
     const topic = document.getElementById('f-topic');
     document.querySelectorAll('a[data-topic]').forEach((a) =>
       a.addEventListener('click', () => { topic.value = a.dataset.topic; }));
@@ -995,13 +1010,18 @@
     const send = form.querySelector('button[type="submit"]');
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      if (!form.reportValidity()) return;
       const data = Object.fromEntries(new FormData(form));
-      if (data._honey) return;
+      if (data._honey || Date.now() - loadedAt < 3000) {
+        form.reset();
+        status.textContent = SENT;
+        return;
+      }
       data._subject = `Web: ${data['Téma']}`;
       send.disabled = true;
       status.textContent = 'Odesílám…';
       try {
-        const res = await fetch(form.action.replace('formsubmit.co/', 'formsubmit.co/ajax/'), {
+        const res = await fetch(ENDPOINT, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
           body: JSON.stringify(data),
@@ -1009,7 +1029,7 @@
         const out = await res.json().catch(() => ({}));
         if (!res.ok || String(out.success) !== 'true') throw new Error(out.message || res.status);
         form.reset();
-        status.textContent = 'Děkujeme, zpráva odešla.';
+        status.textContent = SENT;
       } catch (err) {
         console.warn('Contact form:', err.message);   // FormSubmit's own reason, for whoever debugs this
         const direct = 'Napište nám prosím přímo na <a href="mailto:info@futsal-tequilky.cz">info@futsal-tequilky.cz</a>.';
