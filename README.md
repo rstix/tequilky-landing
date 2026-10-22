@@ -20,7 +20,7 @@ Je to jedna statická stránka: čisté HTML a CSS, kousek JavaScriptu přímo v
 | `scripts/update_results.py` | Stahuje výsledky a tabulku z lz.futsalliga.cz |
 | `.github/workflows/deploy.yml` | Nasazení webu a pravidelná aktualizace výsledků |
 
-Složky `data/` a `scripts/` a soubory `.github/` se na web nenahrávají.
+Složky `data/`, `scripts/` a `.github/` ani tohle README se na web nenahrávají.
 
 ## Jak udělat změnu
 

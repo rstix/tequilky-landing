@@ -90,6 +90,7 @@ jobs:
             --exclude '_site' \
             --exclude 'data' \
             --exclude 'scripts' \
+            --exclude 'README.md' \
             ./ _site/
           # GitHub Pages caches every file for 10 minutes, so a browser could pair
           # new HTML with yesterday's stylesheet. Stamp the link with the commit.
