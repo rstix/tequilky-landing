@@ -57,6 +57,10 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
+/* .btn sets display, which would otherwise beat the hidden attribute and
+   leave the "show all" buttons on screen after they've done their job. */
+[hidden] { display: none !important; }
+
 html {
   scroll-behavior: smooth;
   /* clear the sticky header when jumping to an anchor */
