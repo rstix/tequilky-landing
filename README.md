@@ -49,12 +49,11 @@ starým stylem, nasazení přidá k odkazu na `styles.css` verzi podle commitu
 
 ### Časté úpravy
 
-- **Hráčky a realizační tým**: sekce `id="tym"`. Každá hráčka je jedna `<li class="player">`:
-  kolečko s iniciálami (`player__mono`, např. `BH`), jméno a případně odznaky
-  (`badge--rep` R = reprezentantka, `badge--role` B = brankářka, T = hrající trenérka).
-  Při přidání nebo odebrání hráčky oprav i počet v nadpisu (`subhead__count`).
-  Člen realizačního týmu je `<li class="staff__person">` s iniciálami ve `staff__mono`,
-  jménem a rolí.
+- **Hráčky a realizační tým**: sekce `id="tym"`. Každá hráčka je jedna `<li class="player">`
+  v `<ul class="squad">`: jméno a případně odznaky (`badge--rep` R = reprezentantka,
+  `badge--role` B = brankářka, T = hrající trenérka). Hráčky drž abecedně, na webu se řadí
+  do dvou sloupců shora dolů. Při přidání nebo odebrání hráčky oprav i počet v nadpisu
+  (`subhead__count`). Člen realizačního týmu je `<li class="staff__person">` se jménem a rolí.
 - **Fotky do galerie**: velká verze do `img/galerie/NN.jpg` (delší strana max. 1600 px),
   náhled do `img/galerie/NN-n.jpg` (šířka 720 px). Na Macu:
 
