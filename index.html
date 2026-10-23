@@ -963,9 +963,14 @@
     document.documentElement.classList.add('has-nextbar');
   })();
 
+  // Header: see-through with white type while the hero photo is under it,
+  // dark glass over the photo once the page has scrolled, light after it.
   (() => {
     const bar = document.getElementById('topbar');
     const hero = document.querySelector('.hero');
+    const scrolled = () => bar.classList.toggle('topbar--scrolled', window.scrollY > 4);
+    scrolled();
+    window.addEventListener('scroll', scrolled, { passive: true });
     if (!('IntersectionObserver' in window) || !hero) { bar.classList.remove('topbar--over'); return; }
     new IntersectionObserver(([entry]) => bar.classList.toggle('topbar--over', entry.isIntersecting),
       { rootMargin: `-${bar.offsetHeight}px 0px 0px 0px` }).observe(hero);

@@ -191,6 +191,13 @@ a { color: inherit; }
 .topbar--over .topnav a { color: #ffffffcc; }
 .topbar--over .topnav__cta { color: #ffffff !important; border-color: #ffffffb3; }
 .topbar--over .topnav__cta:hover { border-color: #ffffff; }
+/* Fully see-through only at the very top. Once the page scrolls, the bar over
+   the photo turns to dark glass, so the hero headline sliding under it can't
+   show through the menu. */
+.topbar--over.topbar--scrolled {
+  background: color-mix(in srgb, #0f0f0f 80%, transparent);
+  backdrop-filter: saturate(160%) blur(12px);
+}
 
 /* The nav is secondary to the page itself — below 40rem the page reads
    top-to-bottom anyway, so we hide the links and keep the one CTA. */
