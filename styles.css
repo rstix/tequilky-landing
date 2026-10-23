@@ -15,6 +15,7 @@
   --cream:       #f6f2ec;
   --cream-rule:  #e6ddd0;
   --cream-ink:   #8a7f70;
+  --red-text:    #9a2924;
 
   --measure: 34rem;        /* prose line length */
   --gutter:  clamp(1rem, 5vw, 4rem);
@@ -36,6 +37,7 @@
     --cream:       #15130f;
     --cream-rule:  #2b2721;
     --cream-ink:   #8f877c;
+    --red-text:    #ef7d70;
   }
 }
 
@@ -51,6 +53,7 @@
   --cream:       #15130f;
   --cream-rule:  #2b2721;
   --cream-ink:   #8f877c;
+  --red-text:    #ef7d70;
 }
 
 /* ──────────────────────────  base  ────────────────────────── */
@@ -542,10 +545,44 @@ a { color: inherit; }
 
 /* ──────────────────────────  representation table  ────────────────────────── */
 
+/* Four headline numbers over the table, split by thin rules. */
+.repre-stats {
+  list-style: none;
+  margin: 2.5rem 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  row-gap: 1.75rem;
+}
+.repre-stats li {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  padding-left: 1.5rem;
+  border-left: 1px solid var(--rule);
+  font-size: .8125rem;
+  color: var(--muted);
+}
+.repre-stats li:first-child { padding-left: 0; border-left: 0; }
+.repre-stats b {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.repre-stats__key b { color: var(--red-text); }
+
+@media (max-width: 40rem) {
+  .repre-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .repre-stats li:nth-child(3) { padding-left: 0; border-left: 0; }
+}
+
 .repre {
   width: 100%;
   border-collapse: collapse;
-  margin: 2rem 0 3.5rem;
+  margin: 2.5rem 0 0;
   font-size: .9375rem;
 }
 
@@ -571,9 +608,11 @@ a { color: inherit; }
 
 .repre tbody th {
   color: var(--ink);
-  font-weight: 500;
+  font-weight: 600;
   white-space: nowrap;
 }
+/* starts, the column the numbers above add up */
+.repre td:nth-child(2) { color: var(--red-text); font-weight: 600; }
 
 .repre tbody tr:last-child th,
 .repre tbody tr:last-child td { border-bottom: 1px solid var(--rule); }
@@ -617,36 +656,6 @@ a { color: inherit; }
     line-height: 1.9;
   }
   .repre .num { width: auto; }
-}
-
-/* player figures -------------------------------------------- */
-
-.figures {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  gap: 2rem;
-  padding-top: 2.5rem;
-  border-top: 1px solid var(--rule);
-}
-
-.figure__name {
-  font-size: 1.125rem;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  margin-bottom: .25rem;
-}
-.figure__meta {
-  font-size: .75rem;
-  letter-spacing: .04em;
-  color: var(--faint);
-  font-variant-numeric: tabular-nums;
-  margin-bottom: .875rem;
-}
-.figure__text {
-  font-size: .875rem;
-  line-height: 1.65;
-  color: var(--muted);
-  text-wrap: pretty;
 }
 
 /* ──────────────────────────  staff  ────────────────────────── */
@@ -805,40 +814,6 @@ a { color: inherit; }
 .squad-legend + .subhead { margin-top: 3.5rem; }
 
 .btn:disabled { opacity: .6; cursor: progress; }
-
-/* ──────────────────────────  national-team panel  ────────────────────────── */
-
-.reveal { margin-top: 2rem; }
-
-.reveal__toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: .75rem;
-  padding: .8125rem 1.5rem;
-  border: 1px solid var(--ink);
-  border-radius: 999px;
-  color: var(--ink);
-  font-size: .9375rem;
-  list-style: none;
-  cursor: pointer;
-  user-select: none;
-}
-.reveal__toggle::-webkit-details-marker { display: none; }
-.reveal__toggle::after {
-  content: "";
-  width: .5rem;
-  height: .5rem;
-  border-right: 1.5px solid currentColor;
-  border-bottom: 1.5px solid currentColor;
-  transform: translateY(-2px) rotate(45deg);
-  transition: transform .2s ease;
-}
-.reveal[open] .reveal__toggle::after { transform: translateY(2px) rotate(-135deg); }
-.reveal__hide,
-.reveal[open] .reveal__show { display: none; }
-.reveal[open] .reveal__hide { display: inline; }
-
-.reveal__body { margin-top: .5rem; }
 
 /* ──────────────────────────  gallery  ────────────────────────── */
 
