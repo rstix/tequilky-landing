@@ -61,10 +61,14 @@
    leave the "show all" buttons on screen after they've done their job. */
 [hidden] { display: none !important; }
 
+/* Height of the next-match bar under the menu; 0 until the script shows it. */
+:root { --nextbar-h: 0rem; }
+.has-nextbar { --nextbar-h: 2.5rem; }
+
 html {
   scroll-behavior: smooth;
   /* clear the sticky header when jumping to an anchor */
-  scroll-padding-top: 5rem;
+  scroll-padding-top: calc(5rem + var(--nextbar-h));
   -webkit-text-size-adjust: 100%;
 }
 
@@ -203,8 +207,8 @@ a { color: inherit; }
   isolation: isolate;
   display: flex;
   min-height: clamp(36rem, 92svh, 54rem);
-  /* the bar is 3.5rem plus its 1px bottom rule */
-  margin-top: calc(-3.5rem - 1px);
+  /* the bar is 3.5rem plus its 1px bottom rule, plus the next-match bar */
+  margin-top: calc(-3.5rem - 1px - var(--nextbar-h));
   overflow: hidden;
   background: #0f0f0f;
   color: #ffffffd9;
@@ -241,7 +245,7 @@ a { color: inherit; }
   width: 100%;
   max-width: var(--shell);
   margin-inline: auto;
-  padding: calc(3.5rem + clamp(3rem, 8vw, 6rem)) var(--gutter) clamp(2.5rem, 5vw, 4rem);
+  padding: calc(3.5rem + var(--nextbar-h) + clamp(3rem, 8vw, 6rem)) var(--gutter) clamp(2.5rem, 5vw, 4rem);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -364,7 +368,7 @@ a { color: inherit; }
   text-transform: uppercase;
   color: var(--faint);
   position: sticky;
-  top: 5rem;
+  top: calc(5rem + var(--nextbar-h));
   align-self: start;
 }
 
@@ -1010,29 +1014,10 @@ a { color: inherit; }
 }
 .link:hover { text-decoration-thickness: 2px; }
 
-/* the next match, lifted out of the list by the script */
-.next-match {
-  margin: 2rem 0 3rem;
-  padding: 1.5rem 1.75rem;
-  border-left: 3px solid #9a2924;
-  background: var(--cream);
-}
-.next-match__label {
-  font-size: .6875rem;
-  font-weight: 500;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: #9a2924;
-}
-.next-match__teams {
-  margin-top: .5rem;
-  font-size: clamp(1.375rem, 3vw, 1.75rem);
-  font-weight: 300;
-  letter-spacing: -0.015em;
-  color: var(--ink);
-}
-.next-match__teams b { font-weight: 600; }
-.next-match__when { margin-top: .375rem; font-size: .9375rem; color: var(--muted); }
+/* The schedule continues the Zápasy section after the red next-match band:
+   the intro stops short and the schedule picks up with no label of its own. */
+.section--head { padding-bottom: clamp(2rem, 4vw, 3rem); }
+.section--tail { padding-top: clamp(2.5rem, 5vw, 3.5rem); }
 
 .fixtures {
   list-style: none;
@@ -1082,7 +1067,118 @@ a { color: inherit; }
 @media (max-width: 40rem) {
   .fixture { grid-template-columns: minmax(0, 1fr) auto; row-gap: .375rem; }
   .fixture__when { grid-column: 1 / -1; flex-direction: row; gap: .625rem; }
-  .next-match { padding: 1.25rem; }
+}
+
+/* ──────────────────────────  next match  ────────────────────────── */
+
+/* A red bar under the menu on every screen and a red band with a live
+   countdown above the schedule; the script fills both from the fixtures. */
+.nextbar {
+  display: block;
+  background: #9a2924;
+  color: #ffffff;
+  font-size: .8125rem;
+  text-decoration: none;
+}
+.nextbar__inner {
+  max-width: var(--shell);
+  height: 2.5rem;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  white-space: nowrap;
+}
+.nextbar__lead { font-weight: 600; }
+.nextbar__info { min-width: 0; overflow: hidden; text-overflow: ellipsis; color: #ffffffd9; }
+.nextbar__more { margin-left: auto; font-weight: 500; }
+.nextbar:hover .nextbar__more { text-decoration: underline; text-underline-offset: .2em; }
+
+.nextbar__dot {
+  flex: 0 0 auto;
+  width: .5rem;
+  height: .5rem;
+  border-radius: 50%;
+  background: #ffffff;
+  animation: nextbar-pulse 2s ease-out infinite;
+}
+@keyframes nextbar-pulse {
+  0%       { box-shadow: 0 0 0 0 #ffffffa6; }
+  70%, 100% { box-shadow: 0 0 0 .4rem #ffffff00; }
+}
+@media (prefers-reduced-motion: reduce) { .nextbar__dot { animation: none; } }
+
+.next-band .section__body { display: flex; flex-direction: column; gap: .875rem; }
+.next-band__kicker {
+  margin: 0;
+  font-size: .75rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+.next-band__teams {
+  margin: 0;
+  font-size: clamp(2rem, 5.5vw, 3.25rem);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.next-band__teams b { font-weight: 600; }
+.next-band__venue { margin: 0; }
+
+.next-band__row {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+.countdown { display: flex; gap: .625rem; }
+.countdown__unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .375rem;
+  width: 5.75rem;
+  padding: .875rem 0 .75rem;
+  border-radius: .75rem;
+  background: #ffffff1a;
+}
+.countdown__num {
+  font-size: 2.875rem;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+}
+.countdown__label {
+  font-size: .625rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.next-band__live {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: .75rem;
+  font-size: 1.375rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+.next-band__actions { display: flex; flex-direction: column; align-items: flex-end; gap: .625rem; }
+
+.btn--light { background: #ffffff; border-color: #ffffff; color: #9a2924; font-weight: 600; }
+.btn--light:hover { background: #f8eceb; border-color: #f8eceb; color: #9a2924; }
+
+@media (max-width: 40rem) {
+  .nextbar__teams, .nextbar__more { display: none; }
+  .countdown__unit { width: 4.25rem; padding: .625rem 0 .5rem; }
+  .countdown__num { font-size: 2rem; }
+  .next-band__actions { flex-direction: row; flex-wrap: wrap; align-items: center; }
 }
 
 /* ──────────────────────────  standings  ────────────────────────── */

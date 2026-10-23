@@ -48,6 +48,14 @@
       </ul>
     </nav>
   </div>
+  <a class="nextbar" id="nextbar" href="#pristi-zapas" hidden>
+    <span class="nextbar__inner">
+      <span class="nextbar__dot" aria-hidden="true"></span>
+      <b class="nextbar__lead"></b>
+      <span class="nextbar__info"><span class="nextbar__when"></span><span class="nextbar__teams"></span></span>
+      <span class="nextbar__more">Rozpis zápasů →</span>
+    </span>
+  </a>
 </header>
 
 <main id="obsah">
@@ -81,7 +89,7 @@
   </section>
 
   <!-- ─────────────────────────  ZÁPASY  ───────────────────────── -->
-  <section class="section" id="zapasy">
+  <section class="section section--head" id="zapasy">
     <p class="section__label">Zápasy</p>
     <div class="section__body">
       <h2 class="section__title">Sezona 2026/27</h2>
@@ -93,13 +101,35 @@
         </p>
       </div>
 
-      <div class="next-match" hidden>
-        <p class="next-match__label">Příští zápas</p>
-        <p class="next-match__teams"></p>
-        <p class="next-match__when"></p>
-      </div>
+    </div>
+  </section>
 
-      <h3 class="subhead">Rozpis zápasů <span class="subhead__count">22</span></h3>
+  <section class="section section--red next-band" id="pristi-zapas" aria-labelledby="pristi-zapas-zapas" hidden>
+    <p class="section__label">Příští zápas</p>
+    <div class="section__body">
+      <p class="next-band__kicker"></p>
+      <h3 class="next-band__teams" id="pristi-zapas-zapas"></h3>
+      <p class="next-band__venue"></p>
+      <div class="next-band__row">
+        <div class="countdown" aria-hidden="true">
+          <span class="countdown__unit"><span class="countdown__num">00</span><span class="countdown__label">dní</span></span>
+          <span class="countdown__unit"><span class="countdown__num">00</span><span class="countdown__label">hodin</span></span>
+          <span class="countdown__unit"><span class="countdown__num">00</span><span class="countdown__label">minut</span></span>
+          <span class="countdown__unit"><span class="countdown__num">00</span><span class="countdown__label">sekund</span></span>
+        </div>
+        <p class="next-band__live" hidden><span class="nextbar__dot" aria-hidden="true"></span>Právě hrajeme</p>
+        <div class="next-band__actions">
+          <a class="btn btn--light next-band__ics" href="#" download="tequilky-zapas.ics">Přidat do kalendáře</a>
+          <a class="btn next-band__map" href="#" target="_blank" rel="noopener">Jak se dostat do haly</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tail" aria-labelledby="rozpis">
+    <div aria-hidden="true"></div>
+    <div class="section__body">
+      <h3 class="subhead" id="rozpis">Rozpis zápasů <span class="subhead__count">22</span></h3>
       <ol class="fixtures" id="fixtures">
           <li class="fixture" data-kickoff="2026-11-14T10:00:00+01:00">
             <time class="fixture__when" datetime="2026-11-14T10:00+01:00"><span class="fixture__day">So 14.&nbsp;11.&nbsp;2026</span><span class="fixture__time">10:00</span></time>
@@ -919,6 +949,79 @@
 <script>
   document.getElementById('rok').textContent = new Date().getFullYear();
 
+  // Next match: a red bar under the menu on every screen and a red band with a
+  // live countdown above the schedule. Both take the first match in the
+  // fixtures list that hasn't finished (kick-off + 2 h), so they move on to the
+  // next one by themselves; after the last match of the season they stay hidden.
+  // Runs before the header block below, which measures the header's height.
+  (() => {
+    const rows = [...document.querySelectorAll('#fixtures .fixture')];
+    const row = rows.find((r) => new Date(r.dataset.kickoff).getTime() + 2 * 3600e3 > Date.now());
+    if (!row) return;
+
+    const kick = new Date(row.dataset.kickoff);
+    const teams = row.querySelector('.fixture__teams');
+    const title = teams.textContent.replace(/\s+/g, ' ').trim();
+    const time = row.querySelector('.fixture__time').textContent;
+    const day = row.querySelector('.fixture__day').textContent.replace(/\s+\d{4}$/, '');
+    const [round, side, venue] = row.querySelector('.fixture__meta').textContent.split(' · ');
+    const DAYS = ['neděle', 'pondělí', 'úterý', 'středa', 'čtvrtek', 'pátek', 'sobota'];
+    const plural = (n, one, few, many) => (n === 1 ? one : n >= 2 && n <= 4 ? few : many);
+
+    const bar = document.getElementById('nextbar');
+    bar.querySelector('.nextbar__when').textContent = `${day} · ${time}`;
+    bar.querySelector('.nextbar__teams').textContent = ` · ${title}${venue ? ` · ${venue}` : ''}`;
+
+    const band = document.getElementById('pristi-zapas');
+    band.querySelector('.next-band__kicker').textContent =
+      `${DAYS[kick.getDay()]} ${kick.getDate()}. ${kick.getMonth() + 1}. · ${time} · ${round}`;
+    band.querySelector('.next-band__teams').innerHTML = teams.innerHTML;
+    band.querySelector('.next-band__venue').textContent =
+      [venue, side === 'doma' ? 'hrajeme doma, přijďte fandit' : 'hrajeme venku, držte nám palce'].filter(Boolean).join(' · ');
+
+    // "Add to calendar" hands over this one match as an .ics file.
+    const utc = (d) => d.toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '');
+    const esc = (t) => t.replace(/([,;\\])/g, '\\$1');
+    const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//futsal-tequilky.cz//CS', 'BEGIN:VEVENT',
+      `UID:${kick.getTime()}@futsal-tequilky.cz`, `DTSTAMP:${utc(new Date())}`,
+      `DTSTART:${utc(kick)}`, `DTEND:${utc(new Date(kick.getTime() + 2 * 3600e3))}`,
+      `SUMMARY:${esc(`Futsal: ${title}`)}`, venue ? `LOCATION:${esc(venue)}` : '',
+      `URL:${row.querySelector('.fixture__link').href}`, 'END:VEVENT', 'END:VCALENDAR'].filter(Boolean).join('\r\n');
+    band.querySelector('.next-band__ics').href = `data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}`;
+    const map = band.querySelector('.next-band__map');
+    if (venue) map.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venue)}`;
+    else map.hidden = true;
+
+    const lead = bar.querySelector('.nextbar__lead');
+    const nums = [...band.querySelectorAll('.countdown__num')];
+    const tick = () => {
+      const left = kick.getTime() - Date.now();
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      const days = Math.round((new Date(kick).setHours(0, 0, 0, 0) - today) / 864e5);
+      // Near days by the calendar, further ones by the countdown's own day count.
+      const full = Math.floor(left / 864e5);
+      lead.textContent = left <= 0 ? 'Právě hrajeme'
+        : days === 0 ? `Dnes hrajeme v ${time}`
+        : days === 1 ? `Zítra hrajeme v ${time}`
+        : days === 2 ? `Pozítří hrajeme v ${time}`
+        : `Příští zápas za ${full} ${plural(full, 'den', 'dny', 'dní')}`;
+      if (left <= 0) {
+        band.querySelector('.countdown').hidden = true;
+        band.querySelector('.next-band__live').hidden = false;
+        return;
+      }
+      const s = Math.floor(left / 1000);
+      [Math.floor(s / 86400), Math.floor(s / 3600) % 24, Math.floor(s / 60) % 60, s % 60]
+        .forEach((v, k) => { nums[k].textContent = String(v).padStart(2, '0'); });
+    };
+    tick();
+    setInterval(tick, 1000);
+
+    bar.hidden = false;
+    band.hidden = false;
+    document.documentElement.classList.add('has-nextbar');
+  })();
+
   (() => {
     const bar = document.getElementById('topbar');
     const hero = document.querySelector('.hero');
@@ -937,13 +1040,7 @@
     rows.forEach((r, i) => r.classList.toggle('is-past', next === -1 || i < next));
     if (next === -1) return;
 
-    const row = rows[next];
-    row.classList.add('is-next');
-    const card = document.querySelector('.next-match');
-    card.querySelector('.next-match__teams').innerHTML = row.querySelector('.fixture__teams').innerHTML;
-    card.querySelector('.next-match__when').innerHTML =
-      `${row.querySelector('.fixture__day').innerHTML} · ${row.querySelector('.fixture__time').textContent} · ${row.querySelector('.fixture__meta').innerHTML}`;
-    card.hidden = false;
+    rows[next].classList.add('is-next');
 
     const start = Math.max(0, next - 1);           // keep the last result in view once the season runs
     const shown = rows.slice(start, start + SHOW);

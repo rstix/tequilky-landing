@@ -71,6 +71,11 @@ starým stylem, nasazení přidá k odkazu na `styles.css` verzi podle commitu
 - **Rozpis zápasů**: na webu je vidět 4 zápasy kolem dneška (poslední odehraný a další),
   zbytek je pod tlačítkem. Počet je `SHOW` ve skriptu na konci `index.html`.
   Zápasy samotné se neupravují v `index.html`, ale v `data/season.json` (viz níže).
+- **Příští zápas**: červená lišta pod menu a červený pás s odpočtem nad rozpisem se plní
+  samy z rozpisu. Berou první zápas, od jehož výkopu ještě neuběhly 2 hodiny, takže se
+  po zápase samy přepnou na další; během zápasu ukazují „Právě hrajeme“ a po posledním
+  zápase sezony zmizí. Tlačítko „Přidat do kalendáře“ v pásu stáhne jen tento zápas
+  (.ics), „Jak se dostat do haly“ otevře halu v Google Mapách.
 
 ## Výsledky a tabulka (automaticky)
 
