@@ -45,21 +45,21 @@
     },
     {
       "round": 3,
-      "kickoff": "2026-12-12T09:00:00+01:00",
+      "kickoff": "2026-12-13T09:00:00+01:00",
       "home": "Tequilky Slavia Malé Hoštice",
       "away": "SK Brušperk",
       "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/de89fe77-c09a-4757-8cc4-1a9b0d568c89",
-      "venue": "SH Senice n/H.",
+      "venue": "SH Malé Hoštice",
       "score": null,
       "postponed": false
     },
     {
       "round": 3,
-      "kickoff": "2026-12-12T12:30:00+01:00",
+      "kickoff": "2026-12-13T12:30:00+01:00",
       "home": "Tequilky Slavia Malé Hoštice",
       "away": "Real Top Frýdek-Místek",
       "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/774d132f-2f87-471e-9963-be614000ef05",
-      "venue": "SH Senice n/H.",
+      "venue": "SH Malé Hoštice",
       "score": null,
       "postponed": false
     },
@@ -69,7 +69,7 @@
       "home": "Tequilky Slavia Malé Hoštice",
       "away": "FC Zlín",
       "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/b4927cb1-4b21-455a-a141-188a2360788b",
-      "venue": "SH Senice n/H.",
+      "venue": "SH Dolní Benešov",
       "score": null,
       "postponed": false
     },
@@ -79,7 +79,7 @@
       "home": "Tequilky Slavia Malé Hoštice",
       "away": "FC Bizoni Uherské Hradiště",
       "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/6492fa3c-e767-4dfd-867e-6fc952d13042",
-      "venue": "SH Senice n/H.",
+      "venue": "SH Dolní Benešov",
       "score": null,
       "postponed": false
     },
@@ -89,7 +89,7 @@
       "home": "Tequilky Slavia Malé Hoštice",
       "away": "TJ Rakovec Kotvrdovice",
       "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/08acad51-d5fe-42fa-a924-119b8fc1fcf1",
-      "venue": "SH Senice n/H.",
+      "venue": "SH Dolní Benešov",
       "score": null,
       "postponed": false
     },
