@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Pull Tequilky's results and the league table from lz.futsalliga.cz (the
-women's league's own site: public, no bot wall) and write them into
+"""Pull Tequilky's results and the league table from 2lz.futsalliga.cz (the
+2nd women's league's own site: public, no bot wall) and write them into
 index.html. Run on a schedule by the deploy workflow; safe to run any time.
 
 It rewrites only three marked spots (the fixtures list, the table body and
@@ -18,10 +18,16 @@ from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA, PAGE = ROOT / "data" / "season.json", ROOT / "index.html"
-BASE, SEASON = "https://lz.futsalliga.cz", "2027"          # 2027 = season 2026/27
+# 2. futsalová liga žen, 2026/27: the season is "2027", group 11 is Východ
+# (group 8 is Západ). The 1st league lives at lz.futsalliga.cz, without a group.
+BASE, SEASON, GROUP = "https://2lz.futsalliga.cz", "2027", "11"
 US = "Tequilky Slavia Malé Hoštice"
 TZ = ZoneInfo("Europe/Prague")
-NAMES = {"SK Rapid Ústí n. L.": "SK Rapid Ústí nad Labem"}   # lz spelling -> ours
+NAMES = {                                                    # league-site spelling -> ours
+    "Tělovýchovná jednota Slavia Malé Hoštice, z.s.": US,
+    "Rakovec Kotvrdovice": "TJ Rakovec Kotvrdovice",
+}
+GRACE_DAYS = 14   # an empty schedule is fine until this long after our first match
 DAYS = ["Po", "Út", "St", "Čt", "Pá", "So", "Ne"]
 UA = "futsal-tequilky.cz results (+https://futsal-tequilky.cz; weekly)"
 ROW = '<div class="row align-items-center pt-3 pb-3 border-bottom border-bcolor">'
@@ -123,14 +129,24 @@ def main():
     season = json.loads(DATA.read_text(encoding="utf-8"))
     fixtures = season["fixtures"]
     try:
-        matches = [m for m in parse_matches(fetch(f"/matches/{SEASON}")) if US in (m["home"], m["away"])]
-        table = parse_table(fetch(f"/standings/{SEASON}"))
+        listed = parse_matches(fetch(f"/matches/{SEASON}/{GROUP}"))
+        table = parse_table(fetch(f"/standings/{SEASON}/{GROUP}"))
     except Exception as e:                                   # network, HTTP, decoding
-        sys.exit(f"lz.futsalliga.cz unreachable: {e}")
+        sys.exit(f"{BASE} unreachable: {e}")
+    matches = [m for m in listed if US in (m["home"], m["away"])]
+    if not listed:
+        # The league fills its site in its own time; an empty page is only
+        # alarming once the season has been running for a while.
+        first = min(datetime.fromisoformat(f["kickoff"]) for f in fixtures)
+        if (datetime.now(TZ) - first).days < GRACE_DAYS:
+            print("schedule not on the league site yet, nothing to do")
+            return
+        sys.exit("the league site still lists no matches: check it, nothing written")
     if not matches:
-        sys.exit("no Tequilky matches on the schedule page: its layout probably changed, nothing written")
-    if table and (len(table) != 12 or sum(t[1] == US for t in table) != 1):
-        sys.exit(f"standings look wrong ({len(table)} rows), nothing written")
+        sys.exit("no Tequilky matches on the schedule page: a team name or its layout changed, nothing written")
+    teams = len({f["home"] for f in fixtures} | {f["away"] for f in fixtures})
+    if table and (len(table) != teams or sum(t[1] == US for t in table) != 1):
+        sys.exit(f"standings look wrong ({len(table)} rows, expected {teams}), nothing written")
 
     by_pair = {(f["home"], f["away"]): f for f in fixtures}  # a double round-robin: each pair once
     for m in matches:
@@ -153,7 +169,7 @@ def main():
             today = datetime.now(TZ)
             page = swap(page, r'(<p class="standings__note">).*?(</p>)',
                         f'Aktualizováno {today.day}.&nbsp;{today.month}.&nbsp;{today.year} podle '
-                        f'<a class="link" href="{BASE}/standings/{SEASON}" target="_blank" rel="noopener">futsalliga.cz</a>.',
+                        f'<a class="link" href="{BASE}/standings/{SEASON}/{GROUP}" target="_blank" rel="noopener">futsalliga.cz</a>.',
                         "table note")
     if any(f["score"] for f in fixtures):
         page = page.replace("Sezona\n          začíná 14.&nbsp;listopadu 2026.", "Sezona\n          začala 14.&nbsp;listopadu 2026.")

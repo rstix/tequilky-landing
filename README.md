@@ -17,7 +17,7 @@ Je to jedna statická stránka: čisté HTML a CSS, kousek JavaScriptu přímo v
 | `favicon.svg`, `apple-touch-icon.png` | Ikona v prohlížeči a na ploše telefonu |
 | `CNAME` | Doména pro GitHub Pages (`futsal-tequilky.cz`). Nemazat |
 | `data/season.json` | Rozpis zápasů sezony s výsledky; z něj se generuje rozpis na webu |
-| `scripts/update_results.py` | Stahuje výsledky a tabulku z lz.futsalliga.cz |
+| `scripts/update_results.py` | Stahuje výsledky a tabulku z 2lz.futsalliga.cz |
 | `.github/workflows/deploy.yml` | Nasazení webu a pravidelná aktualizace výsledků |
 
 Složky `data/`, `scripts/` a `.github/` ani tohle README se na web nenahrávají.
@@ -74,16 +74,22 @@ starým stylem, nasazení přidá k odkazu na `styles.css` verzi podle commitu
   samy z rozpisu. Berou první zápas, od jehož výkopu ještě neuběhly 2 hodiny, takže se
   po zápase samy přepnou na další; během zápasu ukazují „Právě hrajeme“ a po posledním
   zápase sezony zmizí. Tlačítko „Přidat do kalendáře“ v pásu stáhne jen tento zápas
-  (.ics), „Jak se dostat do haly“ otevře halu v Google Mapách.
+  (.ics), „Jak se dostat do haly“ otevře halu v Google Mapách. Stejné tlačítko pod
+  rozpisem stáhne všechny zápasy Tequilek; oba kalendáře si stránka skládá z rozpisu,
+  takže nic dalšího se neudržuje.
 
 ## Výsledky a tabulka (automaticky)
 
 Během sezony se skóre zápasů a ligová tabulka doplňují samy, nikdo nemusí nic přepisovat.
 
-**Odkud.** Z webu ligy <https://lz.futsalliga.cz>: rozpis a výsledky z
-[`/matches/2027`](https://lz.futsalliga.cz/matches/2027), tabulka ze
-[`/standings/2027`](https://lz.futsalliga.cz/standings/2027) (2027 = sezona 2026/27).
-Je to veřejná stránka bez ochrany proti robotům. fotbal.cz se automaticky nečte: je za
+**Odkud.** Tequilky hrají v sezoně 2026/27 2. futsalovou ligu žen, skupinu východ.
+Výsledky bere skript z webu ligy <https://2lz.futsalliga.cz>: rozpis a výsledky z
+[`/matches/2027/11`](https://2lz.futsalliga.cz/matches/2027/11), tabulka ze
+[`/standings/2027/11`](https://2lz.futsalliga.cz/standings/2027/11)
+(2027 = sezona 2026/27, 11 = skupina Východ, 8 = Západ; 1. liga žen je na
+lz.futsalliga.cz bez čísla skupiny). Je to veřejná stránka bez ochrany proti robotům.
+Liga tam rozpis doplňuje sama a někdy až po začátku sezony: dokud je stránka prázdná,
+skript nic nemění a nehlásí chybu (nejdéle 14 dní po našem prvním zápase). fotbal.cz se automaticky nečte: je za
 ochranou Cloudflare a jeho podmínky převzetí obsahu bez souhlasu FAČR zakazují. Odkazy
 „Detail“ u zápasů na fotbal.cz ale vedou dál.
 
@@ -94,7 +100,7 @@ zveřejní nejpozději v pondělí.
 **Co se stane při běhu.**
 
 1. Job `results` spustí `python3 scripts/update_results.py`. Skript:
-   - stáhne rozpis a najde všech 22 zápasů Tequilek; ke každému zápasu v
+   - stáhne rozpis a najde zápasy Tequilek; ke každému zápasu v
      `data/season.json` (páruje se podle dvojice domácí–hosté) doplní skóre, halu a
      případně nový termín, pokud liga zápas přesunula;
    - stáhne tabulku; dokud liga žádnou nezveřejní, zůstává na webu abecední nulová tabulka;
@@ -109,7 +115,7 @@ zveřejní nejpozději v pondělí.
 Na webu pak u odehraného zápasu svítí skóre (výhra červeně, prohra černě, remíza šedě)
 a v popisku „výhra“ / „prohra“ / „remíza“.
 
-**Když se něco pokazí.** Pokud lz.futsalliga.cz nejde, změní vzhled stránky nebo vrátí
+**Když se něco pokazí.** Pokud 2lz.futsalliga.cz nejde, změní vzhled stránky nebo vrátí
 nesmyslná data (jiný počet týmů v tabulce, zápas, který v našem rozpisu není), skript
 nic nepřepíše, skončí chybou a GitHub pošle majiteli repa e-mail o neúspěšném běhu.
 Web zůstane v posledním dobrém stavu.
@@ -132,20 +138,23 @@ Napíše buď `updated: …`, nebo `nothing new: …`. Druhé spuštění po sob
   pak použije ten ligový.
 - **Odložený zápas**: `"postponed": true` přidá k zápasu „odloženo“. Nový termín doplní
   skript sám, jakmile ho liga zveřejní.
-- **Jiné jméno týmu**: liga občas píše názvy jinak (např. „SK Rapid Ústí n. L.“). Převod na
-  názvy z našeho rozpisu je ve slovníku `NAMES` na začátku skriptu.
+- **Jiné jméno týmu**: liga občas píše názvy jinak (např. „Rakovec Kotvrdovice“ místo
+  „TJ Rakovec Kotvrdovice“). Převod na názvy z našeho rozpisu je ve slovníku `NAMES` na
+  začátku skriptu; neznámý zápas skript zastaví chybou, takže se to nepřehlédne.
 
 ### Nová sezona
 
 Jednou ročně, po vylosování nové sezony:
 
-1. Nový `data/season.json`: 22 zápasů Tequilek s `round`, `kickoff`, `home`, `away`,
-   `fotbal` (odkaz na detail zápasu), `venue: null`, `score: null`, `postponed: false`.
-   Pole `season` a `source` nahoře.
-2. Ve skriptu `SEASON = "2028"` (číslo je rok, kdy sezona končí) a seznam týmů v
-   `NAMES`, pokud přibyly nové zkratky.
-3. V `index.html` nadpis „Sezona 2026/27“, text „Sezona začíná …“, abecední nulová
-   tabulka nových 12 týmů a odkazy na fotbal.cz (kalendář, celý rozpis, tabulka).
+1. Nový `data/season.json`: zápasy Tequilek s `round`, `kickoff`, `home`, `away`,
+   `fotbal` (odkaz na detail zápasu), `venue`, `score: null`, `postponed: false`.
+   Nejrychleji z kalendáře soutěže na fotbal.cz („Export do kalendáře“, .ics): každá
+   událost má odkaz na zápas v `UID`, čas, halu a číslo kola na konci čísla utkání.
+2. Ve skriptu `BASE`, `SEASON = "2028"` (rok, kdy sezona končí) a `GROUP` podle ligy
+   a skupiny, a `NAMES`, pokud liga píše některý tým jinak.
+3. V `index.html` nadpis „Sezona 2026/27“, text v úvodu a „Sezona začíná …“, štítek
+   ligy nad nadpisem v úvodu stránky, počet zápasů u rozpisu, abecední nulová tabulka
+   nových týmů a odkazy na fotbal.cz (kalendář soutěže, celý rozpis, tabulka).
 4. Pustit skript lokálně, zkontrolovat výsledek v prohlížeči, pushnout.
 
 ## Hosting a doména
