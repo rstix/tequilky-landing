@@ -1105,10 +1105,18 @@ a { color: inherit; }
   display: grid;
   grid-template-columns: auto 1fr;
   column-gap: .5em;
-  row-gap: .2em;
-  align-items: baseline;
   font-size: clamp(1.625rem, 4.5vw, 2.75rem);
 }
+.next-band__match {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  align-items: baseline;
+  padding-block: .4em;
+}
+.next-band__match:first-child { padding-top: 0; }
+.next-band__match:last-child { padding-bottom: 0; }
+.next-band__match + .next-band__match { border-top: 1px solid #ffffff40; }
 .next-band__time {
   font-variant-numeric: tabular-nums;
   color: #ffffffb3;

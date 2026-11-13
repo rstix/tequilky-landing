@@ -891,7 +891,7 @@
     const h = band.querySelector('.next-band__teams');
     h.classList.toggle('next-band__teams--day', many);
     h.innerHTML = many
-      ? day.map((m) => `<span class="next-band__time">${m.time}</span><span>${m.teams.innerHTML}</span>`).join('')
+      ? day.map((m) => `<span class="next-band__match"><span class="next-band__time">${m.time}</span><span>${m.teams.innerHTML}</span></span>`).join('')
       : next.teams.innerHTML;
     band.querySelector('.next-band__venue').textContent =
       [venue, side === 'doma' ? 'hrajeme doma, přijďte fandit' : 'hrajeme venku, držte nám palce'].filter(Boolean).join(' · ');
