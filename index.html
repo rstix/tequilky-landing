@@ -869,12 +869,20 @@
 
     const bar = document.getElementById('nextbar');
     const short = next.day.replace(/\s+\d{4}$/, '');
-    bar.querySelector('.nextbar__when').textContent = many ? short : `${short} · ${time}`;
-    // Phones show no team names, so a tournament day lists its kick-offs instead.
-    if (many) bar.querySelector('.nextbar__times').textContent =
-      ` · ${day.map((m) => m.time).join(', ').replace(/, ([^,]*)$/, ' a $1')}`;
-    const what = many ? day.map((m) => `${m.time} ${m.rival}`).join(', ') : next.title;
-    bar.querySelector('.nextbar__teams').textContent = ` · ${what}${venue ? ` · ${venue}` : ''}`;
+    const esc = (t) => t.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
+    if (many) {
+      // A tournament day: date and hall first, then each match on its own,
+      // its kick-off in bold and a thin rule between them. Phones have no room
+      // for the opponents and list the kick-offs only.
+      bar.querySelector('.nextbar__when').textContent = `${short}${venue ? ` · ${venue}` : ''}`;
+      bar.querySelector('.nextbar__times').innerHTML =
+        ` · ${day.map((m) => `<b>${m.time}</b>`).join(' a ')}`;
+      bar.querySelector('.nextbar__teams').innerHTML = day
+        .map((m) => `<span class="nextbar__match"><b>${m.time}</b> ${esc(m.rival)}</span>`).join('');
+    } else {
+      bar.querySelector('.nextbar__when').textContent = `${short} · ${time}`;
+      bar.querySelector('.nextbar__teams').textContent = ` · ${next.title}${venue ? ` · ${venue}` : ''}`;
+    }
 
     const band = document.getElementById('pristi-zapas');
     band.querySelector('.next-band__kicker').textContent =
@@ -904,11 +912,14 @@
       const days = Math.round((new Date(kick).setHours(0, 0, 0, 0) - today) / 864e5);
       // Near days by the calendar, further ones by the countdown's own day count.
       const full = Math.floor(left / 864e5);
+      // On a tournament day the kick-offs are listed beside the lead, so the
+      // lead names no time of its own.
+      const at = many ? '' : ` v ${time}`;
       lead.textContent = left <= 0 ? 'Právě hrajeme'
-        : days === 0 ? `Dnes hrajeme v ${time}`
-        : days === 1 ? `Zítra hrajeme v ${time}`
-        : days === 2 ? `Pozítří hrajeme v ${time}`
-        : `Příští zápas za ${full} ${plural(full, 'den', 'dny', 'dní')}`;
+        : days === 0 ? `Dnes hrajeme${at}`
+        : days === 1 ? `Zítra hrajeme${at}`
+        : days === 2 ? `Pozítří hrajeme${at}`
+        : `${many ? 'Příští zápasy' : 'Příští zápas'} za ${full} ${plural(full, 'den', 'dny', 'dní')}`;
       if (left <= 0) {
         band.querySelector('.countdown').hidden = true;
         band.querySelector('.next-band__live').hidden = false;

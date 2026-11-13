@@ -1058,6 +1058,16 @@ a { color: inherit; }
 .nextbar__info { min-width: 0; overflow: hidden; text-overflow: ellipsis; color: #ffffffd9; }
 .nextbar__more { margin-left: auto; font-weight: 500; }
 .nextbar__times { display: none; }
+.nextbar__times b, .nextbar__match b { font-weight: 600; color: #ffffff; }
+.nextbar__match::before {
+  content: "";
+  display: inline-block;
+  width: 1px;
+  height: .875rem;
+  margin-inline: .875rem;
+  vertical-align: -.15em;
+  background: #ffffff66;
+}
 .nextbar:hover .nextbar__more { text-decoration: underline; text-underline-offset: .2em; }
 
 .nextbar__dot {
