@@ -1057,6 +1057,7 @@ a { color: inherit; }
 .nextbar__lead { font-weight: 600; }
 .nextbar__info { min-width: 0; overflow: hidden; text-overflow: ellipsis; color: #ffffffd9; }
 .nextbar__more { margin-left: auto; font-weight: 500; }
+.nextbar__times { display: none; }
 .nextbar:hover .nextbar__more { text-decoration: underline; text-underline-offset: .2em; }
 
 .nextbar__dot {
@@ -1089,6 +1090,19 @@ a { color: inherit; }
   color: var(--ink);
 }
 .next-band__teams b { font-weight: 600; }
+/* A tournament day: one line per match, kick-off time in front. */
+.next-band__teams--day {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: .5em;
+  row-gap: .2em;
+  align-items: baseline;
+  font-size: clamp(1.625rem, 4.5vw, 2.75rem);
+}
+.next-band__time {
+  font-variant-numeric: tabular-nums;
+  color: #ffffffb3;
+}
 .next-band__venue { margin: 0; }
 
 .next-band__row {
@@ -1140,6 +1154,7 @@ a { color: inherit; }
 
 @media (max-width: 40rem) {
   .nextbar__teams, .nextbar__more { display: none; }
+  .nextbar__times { display: inline; }
   .countdown__unit { width: 4.25rem; padding: .625rem 0 .5rem; }
   .countdown__num { font-size: 2rem; }
   .next-band__actions { flex-direction: row; flex-wrap: wrap; align-items: center; }

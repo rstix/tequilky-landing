@@ -73,7 +73,8 @@ starým stylem, nasazení přidá k odkazu na `styles.css` verzi podle commitu
 - **Příští zápas**: červená lišta pod menu a červený pás s odpočtem nad rozpisem se plní
   samy z rozpisu. Berou první zápas, od jehož výkopu ještě neuběhly 2 hodiny, takže se
   po zápase samy přepnou na další; během zápasu ukazují „Právě hrajeme“ a po posledním
-  zápase sezony zmizí. Tlačítko „Přidat do kalendáře“ v pásu stáhne jen tento zápas
+  zápase sezony zmizí. Když se ten den na stejné hale hraje víc zápasů (turnajové dny),
+  ukážou všechny i s časy. Tlačítko „Přidat do kalendáře“ v pásu stáhne zápasy toho dne
   (.ics), „Jak se dostat do haly“ otevře halu v Google Mapách. Stejné tlačítko pod
   rozpisem stáhne všechny zápasy Tequilek; oba kalendáře si stránka skládá z rozpisu,
   takže nic dalšího se neudržuje.

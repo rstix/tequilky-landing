@@ -52,7 +52,7 @@
     <span class="nextbar__inner">
       <span class="nextbar__dot" aria-hidden="true"></span>
       <b class="nextbar__lead"></b>
-      <span class="nextbar__info"><span class="nextbar__when"></span><span class="nextbar__teams"></span></span>
+      <span class="nextbar__info"><span class="nextbar__when"></span><span class="nextbar__times"></span><span class="nextbar__teams"></span></span>
       <span class="nextbar__more">Rozpis zápasů →</span>
     </span>
   </a>
@@ -837,36 +837,61 @@
 
   // Next match: a red bar under the menu on every screen and a red band with a
   // live countdown above the schedule. Both take the first match in the
-  // fixtures list that hasn't finished (kick-off + 2 h), so they move on to the
-  // next one by themselves; after the last match of the season they stay hidden.
-  // Runs before the header block below, which measures the header's height.
+  // fixtures list that hasn't finished (kick-off + 2 h), together with the
+  // rest of that day's matches in the same hall (tournament days have two or
+  // three), so they move on by themselves; after the last match of the season
+  // they stay hidden. Runs before the header block below, which measures the
+  // header's height.
   (() => {
     const rows = [...document.querySelectorAll('#fixtures .fixture')];
-    const row = rows.find((r) => new Date(r.dataset.kickoff).getTime() + 2 * 3600e3 > Date.now());
-    if (!row) return;
+    const first = rows.findIndex((r) => new Date(r.dataset.kickoff).getTime() + 2 * 3600e3 > Date.now());
+    if (first < 0) return;
+    const row = rows[first];
+    const info = (r) => {
+      const teams = r.querySelector('.fixture__teams');
+      const [round, side, venue] = r.querySelector('.fixture__meta').textContent.split(' · ');
+      return {
+        r, teams, round, side, venue,
+        day: r.querySelector('.fixture__day').textContent,
+        time: r.querySelector('.fixture__time').textContent,
+        title: teams.textContent.replace(/\s+/g, ' ').trim(),
+        rival: teams.textContent.replace(/\s+/g, ' ').trim().split(' – ').find((t) => t !== 'Tequilky'),
+      };
+    };
+    const next = info(row);
+    const day = rows.slice(first).map(info).filter((m) => m.day === next.day && m.venue === next.venue);
+    const many = day.length > 1;
 
     const kick = new Date(row.dataset.kickoff);
-    const teams = row.querySelector('.fixture__teams');
-    const title = teams.textContent.replace(/\s+/g, ' ').trim();
-    const time = row.querySelector('.fixture__time').textContent;
-    const day = row.querySelector('.fixture__day').textContent.replace(/\s+\d{4}$/, '');
-    const [round, side, venue] = row.querySelector('.fixture__meta').textContent.split(' · ');
+    const { time, round, side, venue } = next;
     const DAYS = ['neděle', 'pondělí', 'úterý', 'středa', 'čtvrtek', 'pátek', 'sobota'];
     const plural = (n, one, few, many) => (n === 1 ? one : n >= 2 && n <= 4 ? few : many);
 
     const bar = document.getElementById('nextbar');
-    bar.querySelector('.nextbar__when').textContent = `${day} · ${time}`;
-    bar.querySelector('.nextbar__teams').textContent = ` · ${title}${venue ? ` · ${venue}` : ''}`;
+    const short = next.day.replace(/\s+\d{4}$/, '');
+    bar.querySelector('.nextbar__when').textContent = many ? short : `${short} · ${time}`;
+    // Phones show no team names, so a tournament day lists its kick-offs instead.
+    if (many) bar.querySelector('.nextbar__times').textContent =
+      ` · ${day.map((m) => m.time).join(', ').replace(/, ([^,]*)$/, ' a $1')}`;
+    const what = many ? day.map((m) => `${m.time} ${m.rival}`).join(', ') : next.title;
+    bar.querySelector('.nextbar__teams').textContent = ` · ${what}${venue ? ` · ${venue}` : ''}`;
 
     const band = document.getElementById('pristi-zapas');
     band.querySelector('.next-band__kicker').textContent =
-      `${DAYS[kick.getDay()]} ${kick.getDate()}. ${kick.getMonth() + 1}. · ${time} · ${round}`;
-    band.querySelector('.next-band__teams').innerHTML = teams.innerHTML;
+      `${DAYS[kick.getDay()]} ${kick.getDate()}. ${kick.getMonth() + 1}. · `
+      + (many ? `${round} · ${day.length} ${plural(day.length, 'zápas', 'zápasy', 'zápasů')}` : `${time} · ${round}`);
+    const h = band.querySelector('.next-band__teams');
+    h.classList.toggle('next-band__teams--day', many);
+    h.innerHTML = many
+      ? day.map((m) => `<span class="next-band__time">${m.time}</span><span>${m.teams.innerHTML}</span>`).join('')
+      : next.teams.innerHTML;
     band.querySelector('.next-band__venue').textContent =
       [venue, side === 'doma' ? 'hrajeme doma, přijďte fandit' : 'hrajeme venku, držte nám palce'].filter(Boolean).join(' · ');
 
-    // "Add to calendar" hands over this one match as an .ics file.
-    band.querySelector('.next-band__ics').href = icsHref([row]);
+    // "Add to calendar" hands over this day's matches as an .ics file.
+    const ics = band.querySelector('.next-band__ics');
+    ics.href = icsHref(day.map((m) => m.r));
+    if (many) ics.download = 'tequilky-zapasy.ics';
     const map = band.querySelector('.next-band__map');
     if (venue) map.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venue)}`;
     else map.hidden = true;
