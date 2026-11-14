@@ -4,10 +4,14 @@ on:
   push:
     branches: [main]
   workflow_dispatch: # Manual trigger: also pulls the latest results first
-  # Matches are played at weekends and the league posts the scores by Sunday
-  # night, Monday at the latest. Times are UTC (22:00 CET Sunday, then 7:00
-  # and 19:00 CET Monday). Runs with nothing new end without deploying.
+  # Every half hour the script checks season.json and asks the league site
+  # only while one of our matches has ended (kickoff + 75 min, up to a day)
+  # without a score, so a result is live within about half an hour of being
+  # posted. The weekly runs below fetch regardless, for the table and late
+  # corrections. Times are UTC (22:00 CET Sunday, then 7:00 and 19:00 CET
+  # Monday). Runs with nothing new end without deploying.
   schedule:
+    - cron: "*/30 * * * *"
     - cron: "0 21 * * 0"
     - cron: "0 6 * * 1"
     - cron: "0 18 * * 1"
@@ -37,7 +41,7 @@ jobs:
       - uses: actions/checkout@v6.0.2
 
       - name: Update results
-        run: python3 scripts/update_results.py
+        run: python3 scripts/update_results.py ${{ github.event.schedule == '*/30 * * * *' && '--if-due' || '' }}
 
       # A push made with GITHUB_TOKEN doesn't start another workflow run, so
       # the deploy job below publishes this commit itself.

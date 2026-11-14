@@ -94,9 +94,12 @@ skript nic nemění a nehlásí chybu (nejdéle 14 dní po našem prvním zápas
 ochranou Cloudflare a jeho podmínky převzetí obsahu bez souhlasu FAČR zakazují. Odkazy
 „Detail“ u zápasů na fotbal.cz ale vedou dál.
 
-**Kdy.** Workflow se spouští samo v neděli ve 22:00 a v pondělí v 7:00 a v 19:00
-(středoevropský čas; v `deploy.yml` je to v UTC). Zápasy se hrají o víkendu a liga výsledky
-zveřejní nejpozději v pondělí.
+**Kdy.** Workflow se spouští samo každých 30 minut s `--if-due`: skript se podívá do
+`data/season.json` a na web ligy se ptá, jen když některý náš zápas skončil (výkop +
+75 minut, nejdéle den poté) a ještě nemá skóre. Jinak hned skončí. Výsledek je tak na webu
+zhruba do půl hodiny od chvíle, kdy ho liga zveřejní. Navíc běží bez podmínky v neděli
+ve 22:00 a v pondělí v 7:00 a v 19:00 (středoevropský čas; v `deploy.yml` je to v UTC),
+kvůli tabulce po zápasech ostatních a pozdním opravám.
 
 **Co se stane při běhu.**
 
@@ -104,7 +107,8 @@ zveřejní nejpozději v pondělí.
    - stáhne rozpis a najde zápasy Tequilek; ke každému zápasu v
      `data/season.json` (páruje se podle dvojice domácí–hosté) doplní skóre, halu a
      případně nový termín, pokud liga zápas přesunula;
-   - stáhne tabulku; dokud liga žádnou nezveřejní, zůstává na webu abecední nulová tabulka;
+   - stáhne tabulku; dokud liga žádnou nezveřejní, zůstává na webu abecední nulová tabulka.
+     Liga v tabulce ukazuje jen týmy, které už hrály; ostatní skript doplní dolů s nulami;
    - z `data/season.json` znovu vygeneruje rozpis v `index.html` (mezi
      `<ol class="fixtures" id="fixtures">` a `</ol>`) a tělo tabulky (`<tbody>` v
      `<table class="standings">`), k tabulce napíše „Aktualizováno <datum> podle
@@ -117,7 +121,7 @@ Na webu pak u odehraného zápasu svítí skóre (výhra červeně, prohra čern
 a v popisku „výhra“ / „prohra“ / „remíza“.
 
 **Když se něco pokazí.** Pokud 2lz.futsalliga.cz nejde, změní vzhled stránky nebo vrátí
-nesmyslná data (jiný počet týmů v tabulce, zápas, který v našem rozpisu není), skript
+nesmyslná data (neznámý nebo zdvojený tým v tabulce, zápas, který v našem rozpisu není), skript
 nic nepřepíše, skončí chybou a GitHub pošle majiteli repa e-mail o neúspěšném běhu.
 Web zůstane v posledním dobrém stavu.
 

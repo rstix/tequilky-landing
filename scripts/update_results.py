@@ -2,6 +2,7 @@
 """Pull Tequilky's results and the league table from 2lz.futsalliga.cz (the
 2nd women's league's own site: public, no bot wall) and write them into
 index.html. Run on a schedule by the deploy workflow; safe to run any time.
+With --if-due it asks the league site only while one of our results is due.
 
 It rewrites only three marked spots (the fixtures list, the table body and
 its note), always from data/season.json, so a run with nothing new changes
@@ -12,7 +13,7 @@ import json
 import re
 import sys
 import urllib.request
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -29,7 +30,7 @@ NAMES = {                                                    # league-site spell
 }
 GRACE_DAYS = 14   # an empty schedule is fine until this long after our first match
 DAYS = ["Po", "Út", "St", "Čt", "Pá", "So", "Ne"]
-UA = "futsal-tequilky.cz results (+https://futsal-tequilky.cz; weekly)"
+UA = "futsal-tequilky.cz results (+https://futsal-tequilky.cz; after matches)"
 ROW = '<div class="row align-items-center pt-3 pb-3 border-bottom border-bcolor">'
 
 
@@ -125,9 +126,23 @@ def swap(page, pattern, new, what):
     return page
 
 
+def due(fixtures, now):
+    """A match of ours has ended and its score isn't in yet. Kickoff + 75 min
+    is about the final whistle; after a day the weekly runs take over."""
+    return [f for f in fixtures if not f["score"] and timedelta(minutes=75)
+            <= now - datetime.fromisoformat(f["kickoff"]) <= timedelta(hours=24)]
+
+
 def main():
     season = json.loads(DATA.read_text(encoding="utf-8"))
     fixtures = season["fixtures"]
+    if "--if-due" in sys.argv[1:]:
+        # The frequent schedule: ask the league site only while a result is due.
+        waiting = due(fixtures, datetime.now(TZ))
+        if not waiting:
+            print("no result due, nothing to do")
+            return
+        print("waiting for: " + ", ".join(f'{f["home"]} – {f["away"]}' for f in waiting))
     try:
         listed = parse_matches(fetch(f"/matches/{SEASON}/{GROUP}"))
         table = parse_table(fetch(f"/standings/{SEASON}/{GROUP}"))
@@ -144,9 +159,15 @@ def main():
         sys.exit("the league site still lists no matches: check it, nothing written")
     if not matches:
         sys.exit("no Tequilky matches on the schedule page: a team name or its layout changed, nothing written")
-    teams = len({f["home"] for f in fixtures} | {f["away"] for f in fixtures})
-    if table and (len(table) != teams or sum(t[1] == US for t in table) != 1):
-        sys.exit(f"standings look wrong ({len(table)} rows, expected {teams}), nothing written")
+    teams = {f["home"] for f in fixtures} | {f["away"] for f in fixtures}
+    if table:
+        # The league lists a team only once it has played: add the rest at the
+        # bottom with zeros, so the table always shows the whole group.
+        unknown = [t[1] for t in table if t[1] not in teams]
+        if unknown or len({t[1] for t in table}) != len(table) or sum(t[1] == US for t in table) != 1:
+            sys.exit(f"standings look wrong (unknown or repeated teams: {unknown or 'repeats'}), nothing written")
+        for team in sorted(teams - {t[1] for t in table}):
+            table.append([len(table) + 1, team, "0", "0", "0", "0", "0:0", "0"])
 
     by_pair = {(f["home"], f["away"]): f for f in fixtures}  # a double round-robin: each pair once
     for m in matches:
