@@ -138,6 +138,9 @@ Napíše buď `updated: …`, nebo `nothing new: …`. Druhé spuštění po sob
 - **Neupravuj rozpis přímo v `index.html`.** Příští běh ho přegeneruje ze
   `data/season.json` a ruční úprava zmizí. Úpravy dělej v `data/season.json` a pak
   spusť skript (nebo ruční workflow), který je propíše do stránky.
+- **Liga má špatnou halu**: v `data/season.json` oprav `venue` a přidej
+  `"keep_venue": true`, skript ji pak nepřepíše (tak je to u 13. 12., hraje se v
+  Malých Hošticích, liga uvádí Senice n/H.).
 - **Výsledek dřív, než ho má liga**: zapiš ho do `data/season.json` jako
   `"score": [domácí, hosté]`, např. `[3, 1]`. Skript ho nechá, dokud liga nezveřejní svůj,
   pak použije ten ligový.
