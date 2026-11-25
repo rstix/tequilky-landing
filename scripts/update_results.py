@@ -105,7 +105,7 @@ def render_fixture(f):
               <span class="fixture__teams">{side(f["home"])}{mid}{side(f["away"])}</span>
               <span class="fixture__meta">{" · ".join(meta)}</span>
             </span>
-            <a class="fixture__link" href="{f["fotbal"]}" target="_blank" rel="noopener" aria-label="Detail zápasu {html.escape(f["home"])} – {html.escape(f["away"])} na fotbal.cz">Detail</a>
+            <a class="fixture__link" href="{f.get("fotbal") or f"{BASE}/match/{f['lz']}"}" target="_blank" rel="noopener" aria-label="Detail zápasu {html.escape(f["home"])} – {html.escape(f["away"])} na {"fotbal.cz" if f.get("fotbal") else "futsalliga.cz"}">Detail</a>
           </li>'''
 
 
@@ -148,7 +148,8 @@ def main():
         table = parse_table(fetch(f"/standings/{SEASON}/{GROUP}"))
     except Exception as e:                                   # network, HTTP, decoding
         sys.exit(f"{BASE} unreachable: {e}")
-    matches = [m for m in listed if US in (m["home"], m["away"])]
+    out = set(season.get("withdrawn", []))                  # teams that left: their matches don't count
+    matches = [m for m in listed if US in (m["home"], m["away"]) and not out & {m["home"], m["away"]}]
     if not listed:
         # The league fills its site in its own time; an empty page is only
         # alarming once the season has been running for a while.
@@ -159,21 +160,28 @@ def main():
         sys.exit("the league site still lists no matches: check it, nothing written")
     if not matches:
         sys.exit("no Tequilky matches on the schedule page: a team name or its layout changed, nothing written")
-    teams = {f["home"] for f in fixtures} | {f["away"] for f in fixtures}
+    teams = {f["home"] for f in fixtures} | {f["away"] for f in fixtures} | out
     if table:
         # The league lists a team only once it has played: add the rest at the
         # bottom with zeros, so the table always shows the whole group.
         unknown = [t[1] for t in table if t[1] not in teams]
         if unknown or len({t[1] for t in table}) != len(table) or sum(t[1] == US for t in table) != 1:
             sys.exit(f"standings look wrong (unknown or repeated teams: {unknown or 'repeats'}), nothing written")
-        for team in sorted(teams - {t[1] for t in table}):
+        for team in sorted(teams - out - {t[1] for t in table}):
             table.append([len(table) + 1, team, "0", "0", "0", "0", "0:0", "0"])
 
-    by_pair = {(f["home"], f["away"]): f for f in fixtures}  # a double round-robin: each pair once
+    # Each fixture carries the league's match id ("lz"); a pair can meet more
+    # than once, so a new fixture without an id is matched by pair only.
+    by_id = {f["lz"]: f for f in fixtures if f.get("lz")}
     for m in matches:
-        f = by_pair.get((m["home"], m["away"]))
+        f = by_id.get(m["lz"])
         if f is None:
-            sys.exit(f"unknown fixture on lz: {m['home']} – {m['away']}, nothing written")
+            free = [f for f in fixtures if not f.get("lz") and (f["home"], f["away"]) == (m["home"], m["away"])]
+            if len(free) != 1:
+                sys.exit(f"unknown fixture on lz: {m['home']} – {m['away']} (match {m['lz']}), "
+                         "add it to data/season.json, nothing written")
+            f = free[0]
+            f["lz"] = m["lz"]
         f["kickoff"] = m["kickoff"].isoformat()             # lz is the league's own schedule
         f["venue"] = m["venue"] or f["venue"]
         f["score"] = m["score"] or f["score"]               # keep a hand-entered score until lz has one

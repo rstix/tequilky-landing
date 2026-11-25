@@ -14,7 +14,8 @@
         7,
         2
       ],
-      "postponed": false
+      "postponed": false,
+      "lz": 1771
     },
     {
       "round": 1,
@@ -27,27 +28,30 @@
         5,
         2
       ],
-      "postponed": false
+      "postponed": false,
+      "lz": 1775
     },
     {
       "round": 2,
-      "kickoff": "2026-11-29T11:00:00+01:00",
-      "home": "Žabinští Vlci Brno",
-      "away": "Tequilky Slavia Malé Hoštice",
-      "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/669c684e-245d-4efd-a85b-02ff5c367afa",
-      "venue": "MSH Modřice",
-      "score": null,
-      "postponed": false
-    },
-    {
-      "round": 2,
-      "kickoff": "2026-11-29T13:30:00+01:00",
+      "kickoff": "2026-11-29T10:00:00+01:00",
       "home": "Futsalová škola Třebíč B",
       "away": "Tequilky Slavia Malé Hoštice",
       "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/6bf3ecc2-90e7-4580-944c-83808d1055f0",
-      "venue": "MSH Modřice",
+      "venue": "SH Spartak Třebíč",
       "score": null,
-      "postponed": false
+      "postponed": false,
+      "lz": 1784
+    },
+    {
+      "round": 2,
+      "kickoff": "2026-11-29T11:15:00+01:00",
+      "home": "Tequilky Slavia Malé Hoštice",
+      "away": "TJ Rakovec Kotvrdovice",
+      "fotbal": null,
+      "venue": "SH Spartak Třebíč",
+      "score": null,
+      "postponed": false,
+      "lz": 1884
     },
     {
       "round": 3,
@@ -57,7 +61,8 @@
       "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/de89fe77-c09a-4757-8cc4-1a9b0d568c89",
       "venue": "SH Senice n/H.",
       "score": null,
-      "postponed": false
+      "postponed": false,
+      "lz": 1791
     },
     {
       "round": 3,
@@ -67,7 +72,8 @@
       "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/774d132f-2f87-471e-9963-be614000ef05",
       "venue": "SH Senice n/H.",
       "score": null,
-      "postponed": false
+      "postponed": false,
+      "lz": 1794
     },
     {
       "round": 4,
@@ -77,7 +83,8 @@
       "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/b4927cb1-4b21-455a-a141-188a2360788b",
       "venue": "SH Dolní Benešov",
       "score": null,
-      "postponed": false
+      "postponed": false,
+      "lz": 1797
     },
     {
       "round": 4,
@@ -87,7 +94,8 @@
       "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/6492fa3c-e767-4dfd-867e-6fc952d13042",
       "venue": "SH Dolní Benešov",
       "score": null,
-      "postponed": false
+      "postponed": false,
+      "lz": 1800
     },
     {
       "round": 4,
@@ -97,17 +105,8 @@
       "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/08acad51-d5fe-42fa-a924-119b8fc1fcf1",
       "venue": "SH Dolní Benešov",
       "score": null,
-      "postponed": false
-    },
-    {
-      "round": 5,
-      "kickoff": "2027-01-31T10:00:00+01:00",
-      "home": "Tequilky Slavia Malé Hoštice",
-      "away": "Žabinští Vlci Brno",
-      "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/b664bf07-295e-4e2c-b1cf-36620ab6b905",
-      "venue": "SH Jedovnice",
-      "score": null,
-      "postponed": false
+      "postponed": false,
+      "lz": 1801
     },
     {
       "round": 5,
@@ -117,7 +116,8 @@
       "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/d2d76a0c-4793-4f2c-b9b6-86607df9bd82",
       "venue": "SH Jedovnice",
       "score": null,
-      "postponed": false
+      "postponed": false,
+      "lz": 1813
     },
     {
       "round": 6,
@@ -127,7 +127,8 @@
       "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/71151fe0-6dc3-4cca-8115-ec22f9b15c05",
       "venue": "6.ZŠ Frýdek-Místek",
       "score": null,
-      "postponed": false
+      "postponed": false,
+      "lz": 1815
     },
     {
       "round": 6,
@@ -137,7 +138,11 @@
       "fotbal": "https://www.fotbal.cz/futsal/zapasy/futsal/7a255005-731a-4ed8-b244-a15e1625de86",
       "venue": "6.ZŠ Frýdek-Místek",
       "score": null,
-      "postponed": false
+      "postponed": false,
+      "lz": 1817
     }
+  ],
+  "withdrawn": [
+    "Žabinští Vlci Brno"
   ]
 }
